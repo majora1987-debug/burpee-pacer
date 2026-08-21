@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Burpee Pacer" />
+<meta name="theme-color" content="#14110F" />
+<title>Burpee Pacer</title>
+<style>
+  :root{
+    --ink:#14110F; --surface:#221C18; --surface2:#2E2620; --line:#3A312A;
+    --textHi:#F5EFE6; --muted:#9A8E80; --idle:#E8A33D; --warn:#F25C36; --go:#3BD17A;
+    --disp:"Arial Narrow","Helvetica Neue",system-ui,sans-serif;
+    --ui:system-ui,-apple-system,"Helvetica Neue",sans-serif;
+  }
+  * {box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+  html{height:100%;}
+  body{
+    background:var(--ink); color:var(--textHi); font-family:var(--ui);
+    min-height:100vh; display:flex; flex-direction:column; align-items:center;
+    padding:max(18px,env(safe-area-inset-top)) 18px 104px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .wrap{width:100%; max-width:460px; flex:1; display:flex; flex-direction:column;}
+  .eyebrow{font-size:13px; letter-spacing:.34em; text-transform:uppercase; color:var(--muted); font-weight:500;}
+  .disp{font-family:var(--disp); font-weight:800; font-stretch:condensed; letter-spacing:.01em;}
+  .tnum{font-variant-numeric:tabular-nums;}
+  button{font-family:var(--ui); cursor:pointer; border:none; color:inherit;}
+  input{font-family:var(--disp); font-weight:800; font-stretch:condensed;}
+
+  h1{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:46px; line-height:.95;}
+  .field-label{font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  .stepper{display:flex; gap:12px; align-items:stretch;}
+  .stepBtn{width:60px; min-height:70px; background:var(--surface2); border:1px solid var(--line); border-radius:16px; font-size:32px; font-weight:500;}
+  .numBox{flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; display:grid; place-items:center; min-height:70px;}
+  .numBox input{width:100%; text-align:center; background:transparent; border:none; color:var(--textHi); font-size:42px; outline:none;}
+
+  .seg{display:flex; gap:6px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:5px;}
+  .seg button{flex:1; padding:11px 4px; border-radius:10px; font-size:13.5px; font-weight:600; color:var(--muted); background:transparent; white-space:nowrap; transition:all 0.15s ease;}
+  .seg button.on{background:var(--surface2); color:var(--textHi); box-shadow:inset 0 0 0 1px var(--line);}
+
+  /* Dynamic Timeline Matrix & Grouped Blocks */
+  .grid-preview { margin-top:16px; display:flex; flex-direction:column; gap:12px; }
+  .group-card { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
+  .group-header { display:flex; justify-content:space-between; align-items:baseline; }
+  .group-title { font-weight:800; font-size:15px; color:var(--textHi); letter-spacing:0.02em; text-transform:uppercase; font-family:var(--disp); }
+  .group-meta { font-size:12px; color:var(--muted); font-weight:500; }
+  .group-rest { font-size:13px; font-weight:700; color:var(--go); font-family:var(--disp); letter-spacing:0.03em; }
+  .group-rest.warn { color:var(--warn); }
+  
+  .timeline-bar { display:flex; height:20px; border-radius:8px; overflow:hidden; background:var(--surface2); border:1px solid var(--line); position:relative; }
+  .bar-work { background:var(--go); height:100%; transition:width 0.25s cubic-bezier(0.16, 1, 0.3, 1); display:flex; align-items:center; justify-content:center; }
+  .bar-work.impossible { background:var(--warn); width:100% !important; }
+  .bar-rest { background:transparent; height:100%; transition:width 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+  .bar-label { position:absolute; inset:0; display:flex; justify-content:space-between; align-items:center; padding:0 10px; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; pointer-events:none; }
+  .bar-label span.w-lbl { color:#0C1A12; text-shadow:0 0 4px rgba(255,255,255,0.4); }
+  .bar-label span.r-lbl { color:var(--textHi); }
+
+  .mini-grid-wrap { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; }
+  .mini-grid-title { font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; font-weight:600; }
+  .mini-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(36px, 1fr)); gap:6px; }
+  .mini-cell { background:var(--surface2); border:1px solid var(--line); border-radius:8px; padding:8px 4px; text-align:center; font-size:14px; font-weight:800; font-family:var(--disp); color:var(--textHi); transition:all 0.15s ease; }
+  .mini-cell.drop { border-color:var(--idle); color:var(--idle); background:rgba(232,163,61,0.12); }
+  .mini-cell.warn { border-color:var(--warn); color:var(--warn); background:rgba(242,92,54,0.15); }
+
+  .pace{margin-top:18px; padding:16px; background:var(--surface); border:1px solid var(--line); border-radius:16px; text-align:center;}
+  .pace .big{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:28px; margin-top:4px; letter-spacing:0.01em;}
+  .pace .sub{color:var(--muted); font-size:13.5px; margin-top:5px; line-height:1.45;}
+
+  .chips{display:flex; gap:10px; flex-wrap:wrap;}
+  .chip{background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:11px 16px; font-size:14px; font-weight:500;}
+
+  .btnStart{width:100%; background:var(--go); color:#0C1A12; border-radius:18px; padding:18px;
+    font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:25px; letter-spacing:.04em; text-transform:uppercase; min-height:60px;}
+  .btnStop{width:100%; background:var(--surface2); color:var(--textHi); border:1px solid var(--line); border-radius:18px; padding:16px;
+    font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:21px; letter-spacing:.06em; text-transform:uppercase; min-height:56px; margin-top:8px;}
+  .hint{color:var(--muted); font-size:12px; text-align:center; margin-top:10px; line-height:1.5; padding:0 4px;}
+  .spacer{flex:1; min-height:14px;}
+
+  .topbar{display:flex; justify-content:space-between; align-items:baseline; margin-top:4px;}
+  .topbar .v{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:36px; line-height:1;}
+  .topbar .v .sub{color:var(--muted); font-size:21px;}
+  .centre{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:12px 0;}
+  .ringbox{position:relative; width:300px; height:300px; max-width:78vw; max-height:78vw; display:grid; place-items:center;}
+  .ringbox svg{position:absolute; inset:0; transform:rotate(-90deg);}
+  .bignum{font-family:var(--disp); font-weight:800; font-stretch:condensed; line-height:1; font-variant-numeric:tabular-nums;}
+  #subLabel{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:32px; letter-spacing:.02em; text-transform:none; color:var(--textHi); font-variant-numeric:tabular-nums; line-height:1;}
+  @keyframes pop{0%{transform:scale(.84);}60%{transform:scale(1.07);}100%{transform:scale(1);}}
+  .pop{animation:pop 220ms ease-out;}
+  @media (prefers-reduced-motion: reduce){.pop{animation:none;}}
+
+  .doneWrap{justify-content:center;}
+  .doneNum{font-family:var(--disp); font-weight:800; font-stretch:condensed; line-height:.9; margin-top:6px;}
+  .stats{display:flex; gap:12px; margin-top:28px;}
+  .stat{flex:1; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:15px 12px; text-align:center;}
+  .stat .l{font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--muted);}
+  .stat .v{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:28px; margin-top:4px;}
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="setup" class="wrap">
+  <div style="margin-top:2px;margin-bottom:16px;">
+    <div class="eyebrow">Interval pacer</div>
+    <h1>BURPEE PACER</h1>
+  </div>
+
+  <div class="stepper" style="margin-bottom:14px;">
+    <button class="stepBtn" data-step="reps" data-dir="-1">&minus;</button>
+    <div class="numBox" style="flex-direction:column;gap:0;">
+      <div class="field-label" style="margin:0;">Target Reps</div>
+      <input id="repsInput" inputmode="numeric" value="130" style="font-size:36px;">
+    </div>
+    <button class="stepBtn" data-step="reps" data-dir="1">+</button>
+  </div>
+
+  <div class="stepper" style="margin-bottom:14px;">
+    <button class="stepBtn" data-step="minutes" data-dir="-1">&minus;</button>
+    <div class="numBox" style="flex-direction:column;gap:0;">
+      <div class="field-label" style="margin:0;">Minutes</div>
+      <input id="minutesInput" inputmode="numeric" value="20" style="font-size:36px;">
+    </div>
+    <button class="stepBtn" data-step="minutes" data-dir="1">+</button>
+  </div>
+
+  <div class="field-label">Pacing Style</div>
+  <div class="seg" id="modeSeg" style="margin-bottom:14px;">
+    <button data-mode="continuous">Continuous</button>
+    <button data-mode="sets" class="on">EMOM &amp; Sets</button>
+  </div>
+
+  <!-- Smart EMOM & Step-Down Engine -->
+  <div id="shapeWrap">
+    <div class="field-label">Pacing Strategy (Max Edwards BDP)</div>
+    <div class="seg" id="strategySeg" style="margin-bottom:14px;">
+      <button data-strategy="front" class="on">Step-Down (Front)</button>
+      <button data-strategy="even">Even EMOM</button>
+      <button data-strategy="back">Step-Up (Back)</button>
+    </div>
+
+    <div class="field-label">Interval Block Size</div>
+    <div class="seg" id="blockSizeSeg" style="margin-bottom:14px;">
+      <button data-block="1" class="on">1m (EMOM)</button>
+      <button data-block="2">2m Block</button>
+      <button data-block="5">5m Block</button>
+      <button data-block="custom">Custom</button>
+    </div>
+
+    <div id="customSetsWrap" class="stepper hidden" style="margin-bottom:14px;">
+      <button class="stepBtn" data-step="sets" data-dir="-1">&minus;</button>
+      <div class="numBox" style="flex-direction:column;gap:0;">
+        <div class="field-label" style="margin:0;">Target Rounds / Sets</div>
+        <input id="setsInput" inputmode="numeric" value="10" style="font-size:36px;">
+      </div>
+      <button class="stepBtn" data-step="sets" data-dir="1">+</button>
+    </div>
+
+    <div class="stepper" style="margin-bottom:6px;">
+      <button class="stepBtn" data-step="cadence" data-dir="-0.2">&minus;</button>
+      <div class="numBox" style="flex-direction:column;gap:0;">
+        <div class="field-label" style="margin:0;">Sec Per Rep (Cadence)</div>
+        <input id="cadenceInput" type="text" value="3.8s" style="font-size:36px;" readonly>
+      </div>
+      <button class="stepBtn" data-step="cadence" data-dir="0.2">+</button>
+    </div>
+
+    <!-- Grouped Timeline Matrix Output -->
+    <div id="gridPreview" class="grid-preview"></div>
+  </div>
+
+  <div class="pace">
+    <div class="eyebrow" style="color:var(--idle);">Plan Summary</div>
+    <div class="big" id="paceMain">10m @ 7 reps  →  10m @ 6 reps</div>
+    <div class="sub" id="paceSub">Step-Down (Front) · 20 rounds · Rest ~33s–37s</div>
+  </div>
+
+  <div class="eyebrow" style="margin-top:18px;margin-bottom:10px;">Quick Benchmark Presets</div>
+  <div class="chips" id="chips"></div>
+
+  <div class="spacer"></div>
+  <button class="btnStart" id="startBtn">Start Workout</button>
+  <p class="hint">Volume up. Tap start to enable sound cues. Keep the screen active.</p>
+</div>
+
+<!-- RUN -->
+<div id="run" class="wrap hidden">
+  <div class="topbar">
+    <div>
+      <div class="eyebrow" id="leftLabel">Min</div>
+      <div class="v"><span id="leftValue">0 / 20</span></div>
+    </div>
+    <div style="text-align:right;">
+      <div class="eyebrow">Elapsed</div>
+      <div class="v tnum" id="elapsed">0:00</div>
+    </div>
+  </div>
+
+  <div class="centre">
+    <div class="ringbox">
+      <svg width="300" height="300" viewBox="0 0 300 300">
+        <circle cx="150" cy="150" r="130" fill="none" stroke="#221C18" stroke-width="14"></circle>
+        <circle id="ring" cx="150" cy="150" r="130" fill="none" stroke="#E8A33D" stroke-width="14"
+          stroke-linecap="round" stroke-dasharray="816.81" stroke-dashoffset="0" style="transition:stroke 120ms linear;"></circle>
+      </svg>
+      <div class="bignum" id="bignum" style="color:var(--idle);font-size:clamp(90px,28vw,150px);">10</div>
+    </div>
+    <div class="eyebrow" id="stateLabel" style="margin-top:10px;color:var(--idle);">Next rep in</div>
+    <div id="subLabel" style="margin-top:14px;">1 rep every 10s</div>
+  </div>
+
+  <button class="btnStop" id="stopBtn">Stop</button>
+</div>
+
+<!-- DONE -->
+<div id="done" class="wrap doneWrap hidden">
+  <div style="text-align:center;">
+    <div class="eyebrow" id="doneTitle" style="color:var(--go);">Workout complete</div>
+    <div class="doneNum" id="doneNum" style="font-size:clamp(110px,34vw,180px);color:var(--go);">130</div>
+    <div style="color:var(--muted);font-size:16px;">of <span id="doneTotal">130</span> reps cued</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="l">Time</div><div class="v" id="doneTime">20:00</div></div>
+    <div class="stat"><div class="l" id="donePaceL">Format</div><div class="v" id="donePace">20 rounds</div></div>
+  </div>
+  <div class="spacer"></div>
+  <div style="width:100%;">
+    <button class="btnStart" id="doneBtn">Done</button>
+    <button class="btnStop" id="repeatBtn" style="background:transparent;border:1px solid var(--line);color:var(--textHi);margin-top:12px;">Go again</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+
+  // ---- state ----
+  var phase = "setup";
+  var reps = 130, minutes = 20;
+  var mode = "sets";           // continuous | sets
+  var strategy = "front";      // front (step-down) | even | back (step-up)
+  var blockSize = "1";         // "1" | "2" | "5" | "custom"
+  var chosenSets = 20;        
+  var repCadence = 3.8;      
+  var elapsed = 0, prepLeft = 6, finalReps = 0;
+  var runStart = 0, prepStart = 0, loopId = null;
+  var fr = {}, fb = {};
+  var ctx = null, wake = null, plan = null;
+  var lastRepInSet = -1;
+  var CIRC = 2 * Math.PI * 130;
+
+  function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), r = s%60; return m + ":" + String(r).padStart(2,"0"); }
+  function fmtPace(sec){ return sec >= 60 ? fmt(sec) : (Math.round(sec*10)/10) + "s"; }
+  function clampReps(v){ return Math.max(1, Math.min(500, v)); }
+  function clampMin(v){ return Math.max(1, Math.min(120, v)); }
+  function clampSets(v){ return Math.max(1, Math.min(60, v)); }
+  function clampCadence(v){ return Math.max(1.5, Math.min(10.0, v)); }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+  // ---- audio ----
+  function ensureAudio(){ if(!ctx){ var AC = window.AudioContext || window.webkitAudioContext; ctx = new AC(); } if(ctx.state === "suspended"){ ctx.resume(); } }
+  function tone(freq, dur, vol){
+    if(!ctx) return; var t0 = ctx.currentTime;
+    var osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.type = "square"; osc.frequency.setValueAtTime(freq, t0);
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(g); g.connect(ctx.destination); osc.start(t0); osc.stop(t0 + dur + 0.02);
+  }
+  function beepTick(){ tone(760, 0.11, 0.32); }
+  function beepGo(){ tone(1180, 0.16, 0.5); setTimeout(function(){ tone(1480, 0.22, 0.5); }, 70); }
+
+  // ---- wake lock ----
+  function requestWake(){ try{ if(navigator.wakeLock){ navigator.wakeLock.request("screen").then(function(w){ wake=w; }).catch(function(){}); } }catch(e){} wake=null; }
+  function releaseWake(){ try{ if(wake&&wake.release){ wake.release(); } }catch(e){} wake=null; }
+  document.addEventListener("visibilitychange", function(){ if(document.visibilityState==="visible" && (phase==="prep"||phase==="running")){ requestWake(); } });
+
+  // ---- Smart Step-Down Algorithm ----
+  function smartDistribute(N, S, strat){
+    if(S <= 1) return [N];
+    var base = Math.floor(N / S);
+    var rem = N % S;
+    var sr = [];
+    for(var i=0; i<S; i++) sr.push(base);
+    if(rem === 0) return sr;
+
+    if(strat === "front"){
+      // Max Edwards Step-Down style: put +1s in the first 'rem' sets
+      for(var i=0; i<rem; i++) sr[i]++;
+    } else if(strat === "back"){
+      // Negative split: put +1s in the final 'rem' sets
+      for(var i=S-rem; i<S; i++) sr[i]++;
+    } else {
+      // Even EMOM: distribute +1s as evenly spaced as possible
+      for(var i=0; i<rem; i++){
+        var idx = Math.floor((i * S) / rem);
+        sr[idx]++;
+      }
+    }
+    return sr;
+  }
+
+  function syncBlockSize(){
+    if(blockSize !== "custom"){
+      var sz = parseInt(blockSize, 10);
+      chosenSets = Math.max(1, Math.round(minutes / sz));
+      $("customSetsWrap").classList.add("hidden");
+    } else {
+      $("customSetsWrap").classList.remove("hidden");
+    }
+    $("setsInput").value = chosenSets;
+  }
+
+  function autoAdaptCadence(sr, bt){
+    var maxReps = Math.max.apply(null, sr);
+    if(maxReps * repCadence > bt - 2){
+      repCadence = Math.max(1.5, Math.floor(((bt - 3) / maxReps) * 5) / 5);
+    }
+  }
+
+  function buildPlan(){
+    var totalSec = minutes * 60, sets = [], S, bt, feasible = true;
+    if(mode === "continuous"){
+      S = reps; bt = totalSec / reps;
+      for(var k=0; k<S; k++){ var bs = k*bt; sets.push({ reps:1, blockStart:bs, repTimes:[bs], workEnd:bs, restEnd:bs+bt, restDur:bt, wp:bt }); }
+      return { mode:mode, S:S, bt:bt, sets:sets, endTime:totalSec, totalReps:reps, sr:null, feasible:true };
+    }
+    
+    syncBlockSize();
+    S = chosenSets;
+    var sr = smartDistribute(reps, S, strategy);
+    bt = totalSec / S;
+    autoAdaptCadence(sr, bt);
+
+    for(var k=0; k<S; k++){
+      var bs = k * bt, rt = [];
+      for(var j=0; j<sr[k]; j++) rt.push(bs + j * repCadence);
+      
+      var workEnd = bs + sr[k] * repCadence;
+      var restEnd = (k + 1) * bt;
+      var restDur = restEnd - workEnd;
+      
+      if(workEnd > restEnd + 0.01) feasible = false;
+      sets.push({ reps:sr[k], blockStart:bs, repTimes:rt, workEnd:workEnd, restEnd:restEnd, restDur:Math.max(0, restDur), wp:repCadence });
+    }
+    return { mode:mode, S:S, bt:bt, sets:sets, endTime:totalSec, totalReps:reps, sr:sr, feasible:feasible };
+  }
+
+  function getGroupedBlocks(plan){
+    if(!plan.sets || plan.sets.length === 0) return [];
+    var groups = [];
+    var cur = null;
+    for(var i=0; i<plan.sets.length; i++){
+      var s = plan.sets[i];
+      if(!cur || cur.reps !== s.reps || Math.abs(cur.restDur - s.restDur) > 0.1){
+        if(cur) groups.push(cur);
+        cur = {
+          reps: s.reps, restDur: s.restDur, workDur: s.reps * plan.wp,
+          totalBlock: plan.bt, startSet: i + 1, endSet: i + 1, count: 1
+        };
+      } else {
+        cur.endSet = i + 1; cur.count++;
+      }
+    }
+    if(cur) groups.push(cur);
+    return groups;
+  }
+
+  function renderGridPreview(p){
+    var container = $("gridPreview");
+    if(mode !== "sets" || !p.sets || p.sets.length === 0){
+      container.innerHTML = "";
+      return;
+    }
+    
+    var groups = getGroupedBlocks(p);
+    var html = '';
+    
+    // 1. Grouped Summary Cards
+    groups.forEach(function(g){
+      var isOverfilled = g.workDur > g.totalBlock;
+      var workPct = isOverfilled ? 100 : clamp(Math.round((g.workDur / g.totalBlock) * 100), 5, 100);
+      var restPct = 100 - workPct;
+      
+      var lblPrefix = (blockSize === "1") ? "Min " : "Round ";
+      var rangeStr = (g.startSet === g.endSet) ? (lblPrefix + g.startSet) : (lblPrefix + g.startSet + "&ndash;" + g.endSet);
+      var restText = isOverfilled ? "OVERFLOW!" : ("Rest: " + fmtPace(g.restDur));
+      
+      html += '<div class="group-card">';
+      html += '  <div class="group-header">';
+      html += '    <div>';
+      html += '      <div class="group-title">' + rangeStr + '</div>';
+      html += '      <div class="group-meta">' + g.count + ' ' + (g.count===1?'round':'rounds') + ' of <strong style="color:var(--textHi);">' + g.reps + ' reps</strong> (' + fmtPace(g.totalBlock) + ' block)</div>';
+      html += '    </div>';
+      html += '    <div class="group-rest ' + (isOverfilled ? 'warn':'') + '">' + restText + '</div>';
+      html += '  </div>';
+      html += '  <div class="timeline-bar">';
+      html += '    <div class="bar-work ' + (isOverfilled ? 'impossible':'') + '" style="width:' + workPct + '%;"></div>';
+      if(restPct > 0 && !isOverfilled){
+        html += '    <div class="bar-rest" style="width:' + restPct + '%;"></div>';
+      }
+      html += '    <div class="bar-label"><span class="w-lbl">Work ' + workPct + '%</span><span class="r-lbl">' + (isOverfilled ? 'NO REST' : 'Rest ' + restPct + '%') + '</span></div>';
+      html += '  </div>';
+      html += '</div>';
+    });
+
+    // 2. Mini Visual Pill Grid of all rounds
+    html += '<div class="mini-grid-wrap">';
+    html += '  <div class="mini-grid-title">Full Workout Sequence (' + p.sets.length + ' Rounds)</div>';
+    html += '  <div class="mini-grid">';
+    var firstRep = p.sets[0].reps;
+    p.sets.forEach(function(s){
+      var isOver = (s.reps * repCadence > p.bt);
+      var dropClass = isOver ? "warn" : (s.reps < firstRep ? "drop" : "");
+      html += '    <div class="mini-cell ' + dropClass + '" title="' + s.reps + ' reps (Rest ' + fmtPace(s.restDur) + ')">' + s.reps + '</div>';
+    });
+    html += '  </div>';
+    html += '</div>';
+    
+    container.innerHTML = html;
+  }
+
+  function formatMainSummary(groups){
+    if(groups.length === 1){
+      return (blockSize === "1") ? (minutes + "m @ " + groups[0].reps + " reps EMOM") : (chosenSets + " rounds of " + groups[0].reps + " reps");
+    }
+    if(groups.length === 2){
+      var t1 = (blockSize === "1") ? (groups[0].count + "m") : (groups[0].count + "×");
+      var t2 = (blockSize === "1") ? (groups[1].count + "m") : (groups[1].count + "×");
+      return t1 + " @ " + groups[0].reps + " reps  →  " + t2 + " @ " + groups[1].reps + " reps";
+    }
+    if(groups.length === 3){
+      var t1 = (blockSize === "1") ? (groups[0].count + "m") : (groups[0].count + "×");
+      var t2 = (blockSize === "1") ? (groups[1].count + "m") : (groups[1].count + "×");
+      var t3 = (blockSize === "1") ? (groups[2].count + "m") : (groups[2].count + "×");
+      return t1 + " @ " + groups[0].reps + "  →  " + t2 + " @ " + groups[1].reps + "  →  " + t3 + " @ " + groups[2].reps;
+    }
+    return groups[0].reps + " · " + groups[1].reps + " · " + groups[2].reps + " · …";
+  }
+
+  function updateSetup(){
+    $("repsInput").value = reps;
+    $("minutesInput").value = minutes;
+    
+    document.querySelectorAll("#modeSeg button").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-mode") === mode); });
+    document.querySelectorAll("#strategySeg button").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-strategy") === strategy); });
+    document.querySelectorAll("#blockSizeSeg button").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-block") === blockSize); });
+    
+    $("shapeWrap").classList.toggle("hidden", mode !== "sets");
+
+    var p = buildPlan();
+    
+    $("cadenceInput").value = repCadence.toFixed(1) + "s";
+
+    if(mode === "continuous"){
+      $("paceMain").textContent = "1 rep every " + fmtPace(p.bt);
+      $("paceSub").textContent = reps + " reps across " + fmt(minutes * 60) + " (Even Continuous)";
+    } else {
+      var groups = getGroupedBlocks(p);
+      $("paceMain").textContent = formatMainSummary(groups);
+      
+      var rests = []; for(var k=0; k<p.sets.length; k++) rests.push(p.sets[k].restDur);
+      var rMin = rests.length ? Math.min.apply(null, rests) : 0, rMax = rests.length ? Math.max.apply(null, rests) : 0;
+      
+      var stratName = (strategy === "front") ? "Step-Down (Front)" : (strategy === "back") ? "Step-Up (Back)" : "Even EMOM";
+      var sub = stratName + " · " + p.sets.length + " rounds";
+      if(p.feasible) {
+        sub += (Math.abs(rMax - rMin) < 0.2) ? (" · Rest " + fmtPace(rMin)) : (" · Rest " + fmtPace(rMin) + "–" + fmtPace(rMax));
+      } else {
+        sub = "⚠️ Red blocks overflow! Speed up cadence or reduce reps.";
+      }
+      $("paceSub").textContent = sub;
+      
+      renderGridPreview(p);
+    }
+  }
+
+  function show(name){
+    $("setup").classList.toggle("hidden", name !== "setup");
+    $("run").classList.toggle("hidden", name !== "run");
+    $("done").classList.toggle("hidden", name !== "done");
+  }
+
+  function startLoop(){ stopLoop(); loopId = setInterval(tick, 50); }
+  function stopLoop(){ if(loopId){ clearInterval(loopId); loopId=null; } }
+
+  function repsDoneAt(p, t){
+    var n = 0;
+    for(var k=0; k<p.sets.length; k++){ var rt = p.sets[k].repTimes; for(var j=0; j<rt.length; j++){ if(rt[j] <= t) n++; } }
+    return n;
+  }
+
+  function tick(){
+    var now = Date.now();
+    if(phase === "prep"){
+      var e = (now - prepStart) / 1000;
+      for(var k=0; k<6; k++){ var key="p"+k; if(e >= k && !fb[key]){ fb[key]=1; beepTick(); } }
+      prepLeft = Math.max(0, 6 - e);
+      if(e >= 6){ fb={}; fr={}; runStart=Date.now(); fr["r0-0"]=1; beepGo(); elapsed=0; lastRepInSet=-1; phase="running"; }
+      render(); return;
+    }
+    var t = (now - runStart) / 1000, p = plan;
+    for(var k=0; k<p.sets.length; k++){
+      var s = p.sets[k], bs = s.blockStart;
+      if(k > 0){ for(var n=1; n<=3; n++){ var bt2 = bs - n, ck = "c"+k+"-"+n; if(bt2 > 0 && t >= bt2 && !fb[ck]){ fb[ck]=1; beepTick(); } } }
+      for(var j=0; j<s.repTimes.length; j++){ var rk="r"+k+"-"+j; if(t >= s.repTimes[j] && !fr[rk]){ fr[rk]=1; if(j===0) beepGo(); else beepTick(); } }
+    }
+    elapsed = t;
+    if(t >= p.endTime){ finish(p.totalReps); return; }
+    render();
+  }
+
+  function render(){
+    if(phase === "setup"){ updateSetup(); return; }
+    if(phase === "done") return;
+    var p = plan;
+
+    if(phase === "prep"){
+      var go = prepLeft <= 0.5;
+      paint(go ? "GO" : String(Math.ceil(prepLeft)), go ? "var(--go)" : "var(--warn)", Math.min(1, prepLeft/6), go ? "#3BD17A" : "#F25C36", "Get ready", "", go);
+      var lblStr = (blockSize === "1") ? "Min" : "Round";
+      $("leftLabel").textContent = p.mode === "sets" ? lblStr : "Rep";
+      $("leftValue").innerHTML = p.mode === "sets" ? ("0 <span class='sub'>/ " + p.sets.length + "</span>") : ("0 <span class='sub'>/ " + p.totalReps + "</span>");
+      $("elapsed").textContent = "0:00";
+      return;
+    }
+
+    var t = elapsed;
+    var k = clamp(Math.floor(t / p.bt), 0, p.sets.length - 1);
+    var s = p.sets[k], localT = t - s.blockStart, workLen = s.reps * repCadence, done = repsDoneAt(p, t);
+
+    $("elapsed").textContent = fmt(t);
+    if(p.mode === "sets"){ 
+      var lblStr = (blockSize === "1") ? "Min" : "Round";
+      $("leftLabel").textContent = lblStr; 
+      $("leftValue").innerHTML = (k + 1) + " <span class='sub'>/ " + p.sets.length + "</span>"; 
+    } else { 
+      $("leftLabel").textContent = "Rep"; 
+      $("leftValue").innerHTML = done + " <span class='sub'>/ " + p.totalReps + "</span>"; 
+    }
+
+    var inWork = (p.mode === "sets") && (localT < workLen - 0.001);
+    if(inWork){
+      var repInSet = clamp(Math.floor(localT / repCadence) + 1, 1, s.reps);
+      var frac = (s.reps - repInSet) / s.reps;
+      var pulse = (repInSet !== lastRepInSet); lastRepInSet = repInSet;
+      var lblStr2 = (blockSize === "1") ? ("Min " + (k+1) + " \u2014 go") : ("Round " + (k+1) + " \u2014 go");
+      paint(String(repInSet), "var(--go)", clamp(frac, 0, 1), "#3BD17A", lblStr2, "Rep " + done + " / " + p.totalReps, pulse);
+    } else {
+      lastRepInSet = -1;
+      var secToNext = s.restEnd - t;
+      var restDur = (p.mode === "sets") ? s.restDur : p.bt;
+      var frac2 = restDur > 0 ? clamp(secToNext / restDur, 0, 1) : 0;
+      var state = (secToNext < 0.5) ? "go" : (secToNext <= 3.05 ? "warn" : "idle");
+      var col = state === "go" ? "var(--go)" : state === "warn" ? "var(--warn)" : "var(--idle)";
+      var ringCol = state === "go" ? "#3BD17A" : state === "warn" ? "#F25C36" : "#E8A33D";
+      var big = state === "go" ? "GO" : String(Math.ceil(secToNext));
+      var lbl, sub;
+      var lblStr3 = (blockSize === "1") ? "next min in" : "next round in";
+      if(p.mode === "sets"){ lbl = state === "go" ? "Go!" : ("Rest \u00b7 " + lblStr3); sub = "Rep " + done + " / " + p.totalReps; }
+      else { lbl = state === "go" ? "Burpee!" : "Next rep in"; sub = "1 rep every " + fmtPace(p.bt); }
+      paint(big, col, frac2, ringCol, lbl, sub, state === "go");
+    }
+  }
+
+  function paint(big, color, frac, ringCol, label, sub, pulse){
+    var bn = $("bignum");
+    if(bn.textContent !== big || pulse){ bn.textContent = big; if(pulse){ bn.classList.remove("pop"); void bn.offsetWidth; bn.classList.add("pop"); } }
+    bn.style.color = color;
+    bn.style.fontSize = big === "GO" ? "clamp(60px,20vw,104px)" : "clamp(90px,28vw,150px)";
+    var ring = $("ring");
+    ring.setAttribute("stroke", ringCol);
+    ring.setAttribute("stroke-dashoffset", (CIRC * (1 - frac)).toFixed(1));
+    var sl = $("stateLabel"); sl.textContent = label; sl.style.color = color;
+    $("subLabel").textContent = sub;
+  }
+
+  function start(){
+    ensureAudio(); tone(1, 0.01, 0.0001); requestWake();
+    plan = buildPlan();
+    if(!plan.feasible) {
+      alert("Workout plan overflows block durations! Fix your layout or cadence before launching.");
+      releaseWake(); return;
+    }
+    fb={}; fr={}; prepStart=Date.now(); prepLeft=6; lastRepInSet=-1; phase="prep";
+    show("run"); render(); startLoop();
+  }
+  function stopEarly(){ finish(repsDoneAt(plan, elapsed)); }
+  function finish(cued){
+    stopLoop(); releaseWake();
+    finalReps = cued; phase = "done";
+    var p = plan, complete = cued >= p.totalReps;
+    $("doneTitle").textContent = complete ? "Workout complete" : "Stopped early";
+    $("doneTitle").style.color = complete ? "var(--go)" : "var(--idle)";
+    $("doneNum").textContent = cued;
+    $("doneNum").style.color = complete ? "var(--go)" : "var(--textHi)";
+    $("doneTotal").textContent = p.totalReps;
+    $("doneTime").textContent = fmt(complete ? p.endTime : elapsed);
+    if(p.mode === "sets"){ $("donePaceL").textContent = "Format"; $("donePace").textContent = p.sets.length + " rounds"; }
+    else { $("donePaceL").textContent = "Pace"; $("donePace").textContent = "1 / " + fmtPace(p.bt); }
+    show("done");
+  }
+  function reset(){ phase = "setup"; elapsed = 0; show("setup"); updateSetup(); }
+
+  function buildChips(){
+    var presets = [[100, 20], [120, 20], [130, 20], [150, 20]], c = $("chips");
+    presets.forEach(function(pr){
+      var b = document.createElement("button"); b.className = "chip"; b.textContent = pr[0] + "×" + pr[1] + "m";
+      b.addEventListener("click", function(){ reps = pr[0]; minutes = pr[1]; updateSetup(); });
+      c.appendChild(b);
+    });
+  }
+  
+  document.querySelectorAll(".stepBtn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var dir = parseFloat(btn.getAttribute("data-dir"));
+      var type = btn.getAttribute("data-step");
+      if(type === "reps") {
+        reps = clampReps(reps + (dir * 5));
+      } else if(type === "minutes") {
+        minutes = clampMin(minutes + dir);
+      } else if(type === "sets") {
+        chosenSets = clampSets(chosenSets + dir);
+      } else if(type === "cadence") {
+        repCadence = clampCadence(repCadence + dir);
+      }
+      updateSetup();
+    });
+  });
+  
+  $("repsInput").addEventListener("input", function(e){ var n = parseInt(String(e.target.value).replace(/\D/g,""), 10); reps = clampReps(isNaN(n) ? 1 : n); updateSetup(); });
+  $("repsInput").addEventListener("blur", updateSetup);
+  $("minutesInput").addEventListener("input", function(e){ var n = parseInt(String(e.target.value).replace(/\D/g,""), 10); minutes = clampMin(isNaN(n) ? 1 : n); updateSetup(); });
+  $("minutesInput").addEventListener("blur", updateSetup);
+  
+  $("setsInput").addEventListener("input", function(e){ var n = parseInt(String(e.target.value).replace(/\D/g,""), 10); chosenSets = clampSets(isNaN(n) ? 1 : n); updateSetup(); });
+  $("setsInput").addEventListener("blur", updateSetup);
+  
+  document.querySelectorAll("#modeSeg button").forEach(function(b){ b.addEventListener("click", function(){ mode = b.getAttribute("data-mode"); updateSetup(); }); });
+  document.querySelectorAll("#strategySeg button").forEach(function(b){ b.addEventListener("click", function(){ strategy = b.getAttribute("data-strategy"); updateSetup(); }); });
+  document.querySelectorAll("#blockSizeSeg button").forEach(function(b){ b.addEventListener("click", function(){ blockSize = b.getAttribute("data-block"); updateSetup(); }); });
+  
+  $("startBtn").addEventListener("click", start);
+  $("stopBtn").addEventListener("click", stopEarly);
+  $("doneBtn").addEventListener("click", reset);
+  $("repeatBtn").addEventListener("click", start);
+
+  buildChips(); updateSetup();
+})();
+</script>
+</body>
+</html>
