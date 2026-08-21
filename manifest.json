@@ -1,0 +1,23 @@
+{
+  "name": "Burpee Pacer",
+  "short_name": "Burpee Pacer",
+  "description": "Custom cadence and interval workout timer",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#14110F",
+  "theme_color": "#14110F",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
