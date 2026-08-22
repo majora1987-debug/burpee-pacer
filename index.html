@@ -276,6 +276,11 @@
   }
   function beepTick(){ tone(760, 0.11, 0.32); }
   function beepGo(){ tone(1180, 0.16, 0.5); setTimeout(function(){ tone(1480, 0.22, 0.5); }, 70); }
+  function beepFinish(){
+    tone(880, 0.12, 0.45);
+    setTimeout(function(){ tone(1175, 0.14, 0.5); }, 130);
+    setTimeout(function(){ tone(1568, 0.3, 0.55); }, 280);
+  }
 
   // ---- wake lock ----
   function requestWake(){ try{ if(navigator.wakeLock){ navigator.wakeLock.request("screen").then(function(w){ wake=w; }).catch(function(){}); } }catch(e){} wake=null; }
@@ -329,8 +334,9 @@
     var totalSec = minutes * 60, sets = [], S, bt, feasible = true;
     if(mode === "continuous"){
       S = reps; bt = totalSec / reps;
-      for(var k=0; k<S; k++){ var bs = k*bt; sets.push({ reps:1, blockStart:bs, repTimes:[bs], workEnd:bs, restEnd:bs+bt, restDur:bt, wp:bt }); }
-      return { mode:mode, S:S, bt:bt, sets:sets, endTime:totalSec, totalReps:reps, sr:null, feasible:true };
+      for(var k=0; k<S; k++){ var bs = k*bt; sets.push({ reps:1, blockStart:bs, repTimes:[bs], workEnd:bs + repCadence, restEnd:bs+bt, restDur:bt, wp:bt }); }
+      var endTimeCont = (reps > 0) ? ((reps - 1) * bt + repCadence) : totalSec;
+      return { mode:mode, S:S, bt:bt, sets:sets, endTime:endTimeCont, totalSec:totalSec, totalReps:reps, sr:null, feasible:true };
     }
     
     syncBlockSize();
@@ -350,7 +356,8 @@
       if(workEnd > restEnd + 0.01) feasible = false;
       sets.push({ reps:sr[k], blockStart:bs, repTimes:rt, workEnd:workEnd, restEnd:restEnd, restDur:Math.max(0, restDur), wp:repCadence });
     }
-    return { mode:mode, S:S, bt:bt, sets:sets, endTime:totalSec, totalReps:reps, sr:sr, feasible:feasible };
+    var endTime = (sets.length > 0) ? sets[sets.length - 1].workEnd : totalSec;
+    return { mode:mode, S:S, bt:bt, sets:sets, endTime:endTime, totalSec:totalSec, totalReps:reps, sr:sr, feasible:feasible };
   }
 
   function getGroupedBlocks(plan){
@@ -597,6 +604,7 @@
     stopLoop(); releaseWake();
     finalReps = cued; phase = "done";
     var p = plan, complete = cued >= p.totalReps;
+    if(complete) beepFinish();
     $("doneTitle").textContent = complete ? "Workout complete" : "Stopped early";
     $("doneTitle").style.color = complete ? "var(--go)" : "var(--idle)";
     $("doneNum").textContent = cued;
