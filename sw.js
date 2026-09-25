@@ -1,4 +1,4 @@
-const CACHE_NAME = 'burpee-pacer-v2';
+const CACHE_NAME = 'burpee-pacer-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -6,10 +6,18 @@ const ASSETS = [
   './icon-192.png',
   './icon-512.png'
 ];
+const CDN_ASSETS = [
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js',
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js',
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js'
+];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await cache.addAll(ASSETS);
+      await Promise.allSettled(CDN_ASSETS.map((url) => cache.add(url)));
+    })
   );
   self.skipWaiting();
 });
@@ -28,6 +36,18 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
+  // Never intercept non-GET requests or live Firebase Auth / Firestore API calls
+  if (e.request.method !== 'GET') return;
+  const url = e.request.url;
+  if (
+    url.includes('googleapis.com') ||
+    url.includes('firebaseio.com') ||
+    url.includes('accounts.google.com') ||
+    url.includes('firebaseapp.com')
+  ) {
+    return;
+  }
+
   e.respondWith(
     caches.match(e.request).then((cachedResponse) => {
       if (cachedResponse) {
@@ -42,6 +62,10 @@ self.addEventListener('fetch', (e) => {
         }
         return networkResponse;
       });
-    }).catch(() => caches.match('./index.html'))
+    }).catch(() => {
+      if (e.request.mode === 'navigate') {
+        return caches.match('./index.html');
+      }
+    })
   );
 });

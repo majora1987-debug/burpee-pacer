@@ -101,15 +101,97 @@
   .stat .l{font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--muted);}
   .stat .v{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:28px; margin-top:4px;}
   .hidden{display:none !important;}
+
+  /* Header & Icon Buttons */
+  .hdr-row{display:flex; justify-content:space-between; align-items:flex-start; margin-top:2px; margin-bottom:16px; gap:12px;}
+  .icon-btn{width:46px; height:46px; border-radius:14px; background:var(--surface); border:1px solid var(--line); display:inline-flex; align-items:center; justify-content:center; color:var(--textHi); position:relative; flex-shrink:0; transition:background 0.15s ease, border-color 0.15s ease;}
+  .icon-btn:active{background:var(--surface2);}
+  .icon-btn svg{width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .icon-badge{position:absolute; top:-5px; right:-5px; min-width:20px; height:20px; padding:0 5px; border-radius:999px; background:var(--go); color:#0C1A12; font-family:var(--disp); font-weight:800; font-size:12px; display:inline-flex; align-items:center; justify-content:center; border:2px solid var(--ink);}
+
+  /* History Screen & Auth Card */
+  .auth-card{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:14px; display:flex; flex-direction:column; gap:12px;}
+  .auth-top{display:flex; align-items:center; justify-content:space-between; gap:12px;}
+  .auth-user{display:flex; align-items:center; gap:10px; min-width:0;}
+  .auth-avatar{width:36px; height:36px; border-radius:50%; background:var(--surface2); border:1px solid var(--line); object-fit:cover; flex-shrink:0; display:grid; place-items:center; font-family:var(--disp); font-weight:800; color:var(--idle); font-size:16px;}
+  .auth-info{min-width:0;}
+  .auth-name{font-weight:700; font-size:14px; color:var(--textHi); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .auth-status{font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; margin-top:2px;}
+  .status-dot{width:7px; height:7px; border-radius:50%; background:var(--muted); display:inline-block; flex-shrink:0;}
+  .status-dot.ok{background:var(--go);}
+  .status-dot.warn{background:var(--idle);}
+  .btn-google{width:100%; background:var(--surface2); hover:var(--line); color:var(--textHi); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:14px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.15s ease;}
+  .btn-google:active{background:var(--line);}
+  .btn-sm{background:var(--surface2); color:var(--muted); border:1px solid var(--line); border-radius:10px; padding:7px 12px; font-size:12px; font-weight:600; white-space:nowrap;}
+  .btn-sm:active{color:var(--textHi);}
+
+  /* History Summary Strip */
+  .hist-totals{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:14px;}
+  .hist-tot{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:10px 8px; text-align:center;}
+  .hist-tot .l{font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);}
+  .hist-tot .v{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:24px; margin-top:2px; color:var(--textHi);}
+
+  /* Workout History Cards */
+  .hist-list{display:flex; flex-direction:column; gap:10px; padding-bottom:24px;}
+  .hist-empty{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:36px 20px; text-align:center; color:var(--muted);}
+  .hist-empty .big{font-family:var(--disp); font-weight:800; font-size:22px; color:var(--textHi); margin-bottom:6px; text-transform:uppercase;}
+  .hist-card{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 16px; transition:border-color 0.15s ease; cursor:pointer;}
+  .hist-card.expanded{border-color:var(--muted);}
+  .hist-card-top{display:flex; justify-content:space-between; align-items:center; gap:8px;}
+  .hist-date{font-size:12px; color:var(--muted); font-weight:500; display:flex; align-items:center; gap:6px;}
+  .hist-actions{display:flex; align-items:center; gap:6px;}
+  .badge-pill{font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; border-radius:999px; font-family:var(--disp);}
+  .badge-pill.complete{background:rgba(59,209,122,0.14); color:var(--go); border:1px solid rgba(59,209,122,0.35);}
+  .badge-pill.partial{background:rgba(232,163,61,0.14); color:var(--idle); border:1px solid rgba(232,163,61,0.35);}
+  .del-btn{width:32px; height:32px; border-radius:8px; background:transparent; color:var(--muted); display:inline-flex; align-items:center; justify-content:center; transition:color 0.15s ease, background 0.15s ease;}
+  .del-btn:hover, .del-btn:active{color:var(--warn); background:rgba(242,92,54,0.12);}
+  .del-btn svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+
+  .hist-main{display:flex; justify-content:space-between; align-items:baseline; margin-top:8px; gap:10px;}
+  .hist-reps{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:32px; line-height:1; color:var(--textHi);}
+  .hist-reps .target{font-size:20px; color:var(--muted);}
+  .hist-time{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:24px; color:var(--textHi);}
+  .hist-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; align-items:center;}
+  .hist-tag{font-size:12px; color:var(--muted); background:var(--surface2); border:1px solid var(--line); border-radius:8px; padding:4px 9px; font-weight:500;}
+  .hist-chevron{margin-left:auto; font-size:11px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase;}
+
+  .hist-detail{margin-top:12px; padding-top:12px; border-top:1px solid var(--line); display:none; flex-direction:column; gap:8px;}
+  .hist-card.expanded .hist-detail{display:flex;}
+  .detail-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:8px;}
+  .detail-item{background:var(--surface2); border-radius:10px; padding:8px 10px;}
+  .detail-item .k{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);}
+  .detail-item .val{font-family:var(--disp); font-weight:800; font-size:16px; color:var(--textHi); margin-top:2px;}
+
+  /* Confirmation & Config Modal */
+  .modal-backdrop{position:fixed; inset:0; background:rgba(10,8,7,0.78); display:flex; align-items:center; justify-content:center; padding:20px; z-index:100;}
+  .modal-box{width:100%; max-width:380px; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:20px; display:flex; flex-direction:column; gap:14px;}
+  .modal-title{font-family:var(--disp); font-weight:800; font-size:24px; text-transform:uppercase; color:var(--textHi);}
+  .modal-body{font-size:14px; color:var(--muted); line-height:1.5;}
+  .modal-textarea{width:100%; min-height:120px; background:var(--ink); border:1px solid var(--line); border-radius:12px; color:var(--textHi); font-family:monospace; font-size:12px; padding:10px; resize:vertical; outline:none; -webkit-user-select:text; user-select:text;}
+  .modal-actions{display:flex; gap:10px; margin-top:4px;}
+  .modal-actions button{flex:1; padding:13px; border-radius:12px; font-family:var(--disp); font-weight:800; font-size:17px; letter-spacing:.04em; text-transform:uppercase;}
+  .btn-cancel{background:var(--surface2); border:1px solid var(--line); color:var(--textHi);}
+  .btn-danger{background:var(--warn); color:#14110F;}
+  .btn-confirm{background:var(--go); color:#0C1A12;}
 </style>
 </head>
 <body>
 
 <!-- SETUP -->
 <div id="setup" class="wrap">
-  <div style="margin-top:2px;margin-bottom:16px;">
-    <div class="eyebrow">Interval pacer</div>
-    <h1>BURPEE PACER</h1>
+  <div class="hdr-row">
+    <div>
+      <div class="eyebrow">Interval pacer</div>
+      <h1>BURPEE PACER</h1>
+    </div>
+    <button class="icon-btn" id="historyBtn" title="Workout History" aria-label="Workout History">
+      <svg viewBox="0 0 24 24">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+        <path d="M3 3v5h5"></path>
+        <path d="M12 7v5l4 2"></path>
+      </svg>
+      <span id="historyBadge" class="icon-badge hidden">0</span>
+    </button>
   </div>
 
   <div class="stepper" style="margin-bottom:14px;">
@@ -227,13 +309,102 @@
     <div class="stat"><div class="l">Time</div><div class="v" id="doneTime">20:00</div></div>
     <div class="stat"><div class="l" id="donePaceL">Format</div><div class="v" id="donePace">20 rounds</div></div>
   </div>
+  <p class="hint" id="doneSavedHint" style="margin-top:14px;color:var(--go);">✓ Workout saved to history</p>
   <div class="spacer"></div>
   <div style="width:100%;">
     <button class="btnStart" id="doneBtn">Done</button>
-    <button class="btnStop" id="repeatBtn" style="background:transparent;border:1px solid var(--line);color:var(--textHi);margin-top:12px;">Go again</button>
+    <button class="btnStop" id="doneHistoryBtn" style="background:var(--surface);border:1px solid var(--line);color:var(--textHi);margin-top:10px;">View History</button>
+    <button class="btnStop" id="repeatBtn" style="background:transparent;border:1px solid var(--line);color:var(--muted);margin-top:10px;">Go again</button>
   </div>
 </div>
 
+<!-- HISTORY -->
+<div id="history" class="wrap hidden">
+  <div class="hdr-row">
+    <div>
+      <div class="eyebrow">Workout log</div>
+      <h1>HISTORY</h1>
+    </div>
+    <button class="icon-btn" id="historyBackBtn" title="Back to Setup" aria-label="Back to Setup">
+      <svg viewBox="0 0 24 24">
+        <path d="M19 12H5"></path>
+        <path d="M12 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Cloud Sync / Google Auth Bar -->
+  <div class="auth-card" id="authCard">
+    <div class="auth-top">
+      <div class="auth-user">
+        <div class="auth-avatar" id="authAvatar">☁</div>
+        <div class="auth-info">
+          <div class="auth-name" id="authName">Local Storage Active</div>
+          <div class="auth-status">
+            <span class="status-dot warn" id="syncDot"></span>
+            <span id="syncStatusText">Saved on this device</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <button class="btn-sm hidden" id="firebaseCfgBtn" title="Configure Firebase">Setup</button>
+        <button class="btn-sm hidden" id="signOutBtn">Sign out</button>
+      </div>
+    </div>
+    <button class="btn-google" id="googleSignInBtn">
+      <svg width="18" height="18" viewBox="0 0 48 48">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      <span id="googleSignInLabel">Sign in with Google to sync</span>
+    </button>
+  </div>
+
+  <!-- Summary Totals -->
+  <div class="hist-totals" id="histTotals">
+    <div class="hist-tot"><div class="l">Workouts</div><div class="v tnum" id="totWorkouts">0</div></div>
+    <div class="hist-tot"><div class="l">Total Reps</div><div class="v tnum" id="totReps">0</div></div>
+    <div class="hist-tot"><div class="l">Total Time</div><div class="v tnum" id="totTime">0m</div></div>
+  </div>
+
+  <!-- Chronological Workout List -->
+  <div id="histList" class="hist-list"></div>
+</div>
+
+<!-- DELETE CONFIRMATION MODAL -->
+<div id="deleteModal" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <div class="modal-title">Delete Workout?</div>
+    <div class="modal-body" id="deleteModalBody">This workout will be permanently removed from your history.</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="cancelDeleteBtn">Cancel</button>
+      <button class="btn-danger" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- FIREBASE CONFIG MODAL -->
+<div id="firebaseModal" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <div class="modal-title">Firebase Cloud Setup</div>
+    <div class="modal-body">
+      Paste your Firebase web app config object (or JSON) from <strong>console.firebase.google.com</strong> (Project Settings &rarr; Your apps &rarr; Web app):
+    </div>
+    <textarea id="firebaseConfigInput" class="modal-textarea" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
+    <div id="firebaseConfigErr" style="color:var(--warn);font-size:12px;" class="hidden"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="cancelFirebaseBtn">Cancel</button>
+      <button class="btn-confirm" id="saveFirebaseBtn">Save &amp; Connect</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase Compat SDKs (loaded from Google CDN; app works offline if unavailable) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
 (function(){
   "use strict";
@@ -498,6 +669,7 @@
     $("setup").classList.toggle("hidden", name !== "setup");
     $("run").classList.toggle("hidden", name !== "run");
     $("done").classList.toggle("hidden", name !== "done");
+    $("history").classList.toggle("hidden", name !== "history");
   }
 
   function startLoop(){ stopLoop(); loopId = setInterval(tick, 50); }
@@ -531,7 +703,7 @@
 
   function render(){
     if(phase === "setup"){ updateSetup(); return; }
-    if(phase === "done") return;
+    if(phase === "done" || phase === "history") return;
     var p = plan;
 
     if(phase === "prep"){
@@ -609,18 +781,562 @@
     stopLoop(); releaseWake();
     finalReps = cued; phase = "done";
     var p = plan, complete = cued >= p.totalReps;
+    var finalElapsed = complete ? p.endTime : elapsed;
     if(complete) beepFinish();
     $("doneTitle").textContent = complete ? "Workout complete" : "Stopped early";
     $("doneTitle").style.color = complete ? "var(--go)" : "var(--idle)";
     $("doneNum").textContent = cued;
     $("doneNum").style.color = complete ? "var(--go)" : "var(--textHi)";
     $("doneTotal").textContent = p.totalReps;
-    $("doneTime").textContent = fmt(complete ? p.endTime : elapsed);
+    $("doneTime").textContent = fmt(finalElapsed);
     if(p.mode === "sets"){ $("donePaceL").textContent = "Format"; $("donePace").textContent = p.sets.length + " rounds"; }
     else { $("donePaceL").textContent = "Pace"; $("donePace").textContent = "1 / " + fmtPace(p.bt); }
+
+    saveWorkout(p, cued, complete, finalElapsed);
     show("done");
   }
   function reset(){ phase = "setup"; elapsed = 0; show("setup"); updateSetup(); }
+
+  // ---- Local Storage & Cloud Sync (Firestore) ----
+  var STORAGE_KEY = "burpee_pacer_workouts_v1";
+  var DELETED_KEY = "burpee_pacer_deleted_ids_v1";
+  var FB_CFG_KEY  = "burpee_pacer_firebase_config_v1";
+
+  // Firebase project configuration for burpee-pacer
+  var DEFAULT_FIREBASE_CONFIG = {
+    apiKey: "AIzaSyApUj2w-b4SMBUB6XP6VCfMfpL-WVHx2FY",
+    authDomain: "burpee-pacer.firebaseapp.com",
+    projectId: "burpee-pacer",
+    storageBucket: "burpee-pacer.firebasestorage.app",
+    messagingSenderId: "1053001839571",
+    appId: "1:1053001839571:web:dea032ac4f11ae7ca3b526"
+  };
+
+  var fbApp = null, fbAuth = null, fbDb = null, currentUser = null;
+  var isSyncing = false;
+  var pendingDeleteId = null;
+  var expandedCardIds = {};
+
+  function generateId(){
+    if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c){
+      var r = Math.random() * 16 | 0, v = c === "x" ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  function getWorkouts(){
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      if(!Array.isArray(arr)) return [];
+      arr.sort(function(a, b){ return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(); });
+      return arr;
+    } catch(e){ return []; }
+  }
+
+  function setWorkouts(arr){
+    try {
+      arr.sort(function(a, b){ return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(); });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    } catch(e){}
+    updateHistoryBadge();
+  }
+
+  function getDeletedIds(){
+    try {
+      var raw = localStorage.getItem(DELETED_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch(e){ return []; }
+  }
+
+  function setDeletedIds(arr){
+    try { localStorage.setItem(DELETED_KEY, JSON.stringify(arr)); } catch(e){}
+  }
+
+  function updateHistoryBadge(){
+    var count = getWorkouts().length;
+    var badge = $("historyBadge");
+    if(!badge) return;
+    badge.textContent = count > 99 ? "99+" : String(count);
+    badge.classList.toggle("hidden", count === 0);
+  }
+
+  function saveWorkout(p, cued, complete, elapsedSec){
+    var rec = {
+      id: generateId(),
+      timestamp: new Date().toISOString(),
+      repsCompleted: cued,
+      repsTarget: p.totalReps,
+      completed: Boolean(complete),
+      elapsedSeconds: Math.max(0, Math.round(elapsedSec)),
+      totalSeconds: p.totalSec,
+      mode: p.mode,
+      strategy: p.mode === "sets" ? strategy : "even",
+      blockSize: p.mode === "sets" ? blockSize : "1",
+      sets: p.sets.length,
+      cadence: repCadence,
+      minutes: minutes,
+      synced: false
+    };
+    var list = getWorkouts();
+    list.unshift(rec);
+    setWorkouts(list);
+
+    var hint = $("doneSavedHint");
+    if(hint){
+      hint.textContent = currentUser ? "✓ Saved locally · Syncing to cloud…" : "✓ Workout saved to history";
+    }
+
+    if(currentUser && fbDb){
+      pushSingleWorkout(rec).then(function(ok){
+        if(ok && hint) hint.textContent = "✓ Saved & synced to cloud";
+      });
+    }
+    return rec;
+  }
+
+  function toFirestoreData(rec){
+    return {
+      id: rec.id,
+      timestamp: rec.timestamp,
+      repsCompleted: rec.repsCompleted,
+      repsTarget: rec.repsTarget,
+      completed: rec.completed,
+      elapsedSeconds: rec.elapsedSeconds,
+      totalSeconds: rec.totalSeconds,
+      mode: rec.mode,
+      strategy: rec.strategy,
+      blockSize: rec.blockSize,
+      sets: rec.sets,
+      cadence: rec.cadence,
+      minutes: rec.minutes
+    };
+  }
+
+  function pushSingleWorkout(rec){
+    if(!currentUser || !fbDb) return Promise.resolve(false);
+    return fbDb.collection("users").doc(currentUser.uid)
+      .collection("workouts").doc(rec.id)
+      .set(toFirestoreData(rec))
+      .then(function(){
+        var list = getWorkouts();
+        for(var i=0; i<list.length; i++){
+          if(list[i].id === rec.id){ list[i].synced = true; break; }
+        }
+        setWorkouts(list);
+        if(phase === "history") renderHistory();
+        updateAuthUI();
+        return true;
+      })
+      .catch(function(err){
+        console.warn("Firestore write failed (will retry on next sync):", err);
+        updateAuthUI();
+        return false;
+      });
+  }
+
+  function deleteWorkout(id){
+    var list = getWorkouts().filter(function(w){ return w.id !== id; });
+    setWorkouts(list);
+    delete expandedCardIds[id];
+    renderHistory();
+
+    if(currentUser && fbDb){
+      fbDb.collection("users").doc(currentUser.uid)
+        .collection("workouts").doc(id)
+        .delete()
+        .catch(function(){
+          var del = getDeletedIds();
+          if(del.indexOf(id) === -1){ del.push(id); setDeletedIds(del); }
+        });
+    } else {
+      var del = getDeletedIds();
+      if(del.indexOf(id) === -1){ del.push(id); setDeletedIds(del); }
+    }
+  }
+
+  function syncWithFirestore(){
+    if(!currentUser || !fbDb || isSyncing) return Promise.resolve();
+    isSyncing = true;
+    updateAuthUI();
+
+    var userWorkoutsRef = fbDb.collection("users").doc(currentUser.uid).collection("workouts");
+    var pendingDeletes = getDeletedIds();
+
+    // 1. Process any pending offline deletions
+    var deletePromises = pendingDeletes.map(function(delId){
+      return userWorkoutsRef.doc(delId).delete().catch(function(){});
+    });
+
+    return Promise.all(deletePromises)
+      .then(function(){
+        setDeletedIds([]);
+        // 2. Push unsynced local records
+        var localList = getWorkouts();
+        var unsynced = localList.filter(function(w){ return !w.synced; });
+        var pushPromises = unsynced.map(function(w){
+          return userWorkoutsRef.doc(w.id).set(toFirestoreData(w)).then(function(){
+            w.synced = true;
+          });
+        });
+        return Promise.all(pushPromises).then(function(){
+          setWorkouts(localList);
+        });
+      })
+      .then(function(){
+        // 3. Pull all remote records and merge with localStorage
+        return userWorkoutsRef.get();
+      })
+      .then(function(snapshot){
+        var localList = getWorkouts();
+        var byId = {};
+        localList.forEach(function(w){ byId[w.id] = w; });
+
+        snapshot.forEach(function(doc){
+          var data = doc.data();
+          if(data && data.id){
+            data.synced = true;
+            if(!byId[data.id]){
+              byId[data.id] = data;
+            } else {
+              byId[data.id].synced = true;
+            }
+          }
+        });
+
+        var merged = Object.keys(byId).map(function(k){ return byId[k]; });
+        setWorkouts(merged);
+        isSyncing = false;
+        updateAuthUI();
+        if(phase === "history") renderHistory();
+      })
+      .catch(function(err){
+        console.warn("Cloud sync error:", err);
+        isSyncing = false;
+        updateAuthUI();
+      });
+  }
+
+  function formatDateTime(iso){
+    try {
+      var d = new Date(iso);
+      var datePart = d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+      var timePart = d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+      return datePart + " \u00b7 " + timePart;
+    } catch(e){ return iso; }
+  }
+
+  function formatTotalDuration(totalSec){
+    if(totalSec < 60) return totalSec + "s";
+    var mins = Math.round(totalSec / 60);
+    if(mins < 60) return mins + "m";
+    var h = Math.floor(mins / 60), r = mins % 60;
+    return r > 0 ? (h + "h " + r + "m") : (h + "h");
+  }
+
+  function formatStrategyLabel(w){
+    if(w.mode === "continuous") return "Even Pace";
+    if(w.strategy === "front") return "Step-Down (Front)";
+    if(w.strategy === "back") return "Step-Up (Back)";
+    return "Even EMOM";
+  }
+
+  function renderHistory(){
+    updateAuthUI();
+    var list = getWorkouts();
+    var totReps = 0, totSec = 0;
+    for(var i=0; i<list.length; i++){
+      totReps += (list[i].repsCompleted || 0);
+      totSec += (list[i].elapsedSeconds || 0);
+    }
+    $("totWorkouts").textContent = String(list.length);
+    $("totReps").textContent = totReps.toLocaleString();
+    $("totTime").textContent = formatTotalDuration(totSec);
+
+    var container = $("histList");
+    if(list.length === 0){
+      container.innerHTML =
+        '<div class="hist-empty">' +
+        '  <div class="big">No Workouts Yet</div>' +
+        '  <div>Complete or stop a workout and your stats will automatically be saved here.</div>' +
+        '</div>';
+      return;
+    }
+
+    var html = "";
+    list.forEach(function(w){
+      var isExp = Boolean(expandedCardIds[w.id]);
+      var badgeCls = w.completed ? "complete" : "partial";
+      var badgeTxt = w.completed ? "Completed" : "Stopped Early";
+      var modeTxt = w.mode === "sets" ? (w.blockSize === "1" ? "EMOM" : "Custom Sets") : "Continuous";
+      var stratTxt = formatStrategyLabel(w);
+      var pct = w.repsTarget > 0 ? Math.round((w.repsCompleted / w.repsTarget) * 100) : 100;
+      var rpm = w.elapsedSeconds > 0 ? ((w.repsCompleted / (w.elapsedSeconds / 60)).toFixed(1) + " / min") : "—";
+      var syncText = w.synced ? "Synced to cloud" : "Saved locally";
+      var syncIcon = w.synced ? '<span title="Synced to cloud" style="color:var(--go);">✓</span>' : '<span title="Saved locally" style="color:var(--idle);">●</span>';
+
+      html += '<div class="hist-card ' + (isExp ? 'expanded' : '') + '" data-id="' + w.id + '">';
+      html += '  <div class="hist-card-top">';
+      html += '    <div class="hist-date">' + syncIcon + ' <span>' + formatDateTime(w.timestamp) + '</span></div>';
+      html += '    <div class="hist-actions">';
+      html += '      <span class="badge-pill ' + badgeCls + '">' + badgeTxt + '</span>';
+      html += '      <button class="del-btn" data-del="' + w.id + '" title="Delete workout" aria-label="Delete workout">';
+      html += '        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>';
+      html += '      </button>';
+      html += '    </div>';
+      html += '  </div>';
+
+      html += '  <div class="hist-main">';
+      html += '    <div class="hist-reps tnum"><span style="color:' + (w.completed ? 'var(--go)' : 'var(--textHi)') + ';">' + w.repsCompleted + '</span> <span class="target">/ ' + w.repsTarget + ' reps</span></div>';
+      html += '    <div class="hist-time tnum">' + fmt(w.elapsedSeconds) + '</div>';
+      html += '  </div>';
+
+      html += '  <div class="hist-tags">';
+      html += '    <span class="hist-tag">' + modeTxt + '</span>';
+      html += '    <span class="hist-tag">' + stratTxt + '</span>';
+      if(w.mode === "sets" && w.sets){
+        html += '  <span class="hist-tag">' + w.sets + ' rounds</span>';
+      }
+      html += '    <span class="hist-chevron">' + (isExp ? 'Hide ▲' : 'Details ▼') + '</span>';
+      html += '  </div>';
+
+      html += '  <div class="hist-detail">';
+      html += '    <div class="detail-grid">';
+      html += '      <div class="detail-item"><div class="k">Completion</div><div class="val tnum">' + pct + '% (' + w.repsCompleted + '/' + w.repsTarget + ')</div></div>';
+      html += '      <div class="detail-item"><div class="k">Avg Pace</div><div class="val tnum">' + rpm + '</div></div>';
+      html += '      <div class="detail-item"><div class="k">Cadence</div><div class="val tnum">' + (w.cadence ? w.cadence.toFixed(1) + 's / rep' : '—') + '</div></div>';
+      html += '      <div class="detail-item"><div class="k">Target Time</div><div class="val tnum">' + fmt(w.totalSeconds || (w.minutes * 60)) + '</div></div>';
+      html += '    </div>';
+      html += '    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">';
+      html += '      <span style="font-size:11.5px;color:var(--muted);">Status: ' + syncText + '</span>';
+      html += '      <button class="btn-sm" data-load="' + w.id + '" style="color:var(--go);border-color:rgba(59,209,122,0.35);">Load Settings</button>';
+      html += '    </div>';
+      html += '  </div>';
+      html += '</div>';
+    });
+
+    container.innerHTML = html;
+
+    // Bind card expansion, delete buttons, and load settings buttons
+    container.querySelectorAll(".hist-card").forEach(function(card){
+      card.addEventListener("click", function(e){
+        if(e.target.closest("[data-del]") || e.target.closest("[data-load]")) return;
+        var id = card.getAttribute("data-id");
+        expandedCardIds[id] = !expandedCardIds[id];
+        card.classList.toggle("expanded", Boolean(expandedCardIds[id]));
+        var chev = card.querySelector(".hist-chevron");
+        if(chev) chev.textContent = expandedCardIds[id] ? "Hide ▲" : "Details ▼";
+      });
+    });
+
+    container.querySelectorAll("[data-del]").forEach(function(btn){
+      btn.addEventListener("click", function(e){
+        e.stopPropagation();
+        var id = btn.getAttribute("data-del");
+        openDeleteModal(id);
+      });
+    });
+
+    container.querySelectorAll("[data-load]").forEach(function(btn){
+      btn.addEventListener("click", function(e){
+        e.stopPropagation();
+        var id = btn.getAttribute("data-load");
+        var w = getWorkouts().find(function(item){ return item.id === id; });
+        if(w){
+          reps = clampReps(w.repsTarget || 130);
+          minutes = clampMin(w.minutes || Math.round((w.totalSeconds || 1200) / 60));
+          mode = w.mode || "sets";
+          strategy = w.strategy || "front";
+          blockSize = w.blockSize || "1";
+          if(w.sets) chosenSets = clampSets(w.sets);
+          if(w.cadence) repCadence = clampCadence(w.cadence);
+          phase = "setup";
+          show("setup");
+          updateSetup();
+        }
+      });
+    });
+  }
+
+  function openDeleteModal(id){
+    pendingDeleteId = id;
+    var w = getWorkouts().find(function(item){ return item.id === id; });
+    if(w){
+      $("deleteModalBody").textContent = "Delete the workout from " + formatDateTime(w.timestamp) + " (" + w.repsCompleted + "/" + w.repsTarget + " reps)? This cannot be undone.";
+    }
+    $("deleteModal").classList.remove("hidden");
+  }
+
+  function closeDeleteModal(){
+    pendingDeleteId = null;
+    $("deleteModal").classList.add("hidden");
+  }
+
+  function getActiveFirebaseConfig(){
+    if(DEFAULT_FIREBASE_CONFIG && DEFAULT_FIREBASE_CONFIG.apiKey && DEFAULT_FIREBASE_CONFIG.projectId){
+      return DEFAULT_FIREBASE_CONFIG;
+    }
+    try {
+      var saved = localStorage.getItem(FB_CFG_KEY);
+      if(saved){
+        var parsed = JSON.parse(saved);
+        if(parsed && parsed.apiKey && parsed.projectId) return parsed;
+      }
+    } catch(e){}
+    return null;
+  }
+
+  function parseFirebaseConfigSnippet(raw){
+    var trimmed = raw.trim();
+    try {
+      return JSON.parse(trimmed);
+    } catch(e){}
+    // Support pasting JS snippet like `const firebaseConfig = { apiKey: "...", ... };`
+    var match = trimmed.match(/\{[\s\S]*\}/);
+    if(!match) return null;
+    var objStr = match[0]
+      .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?\s*:/g, '"$2":')
+      .replace(/'/g, '"')
+      .replace(/,\s*\}/g, "}");
+    try {
+      return JSON.parse(objStr);
+    } catch(e){ return null; }
+  }
+
+  function initFirebase(){
+    var cfg = getActiveFirebaseConfig();
+    if(!cfg || !window.firebase) {
+      updateAuthUI();
+      return false;
+    }
+    try {
+      if(!firebase.apps || firebase.apps.length === 0){
+        fbApp = firebase.initializeApp(cfg);
+      } else {
+        fbApp = firebase.app();
+      }
+      fbAuth = firebase.auth();
+      fbDb = firebase.firestore();
+
+      fbAuth.onAuthStateChanged(function(user){
+        currentUser = user || null;
+        updateAuthUI();
+        if(currentUser){
+          syncWithFirestore();
+        }
+      });
+      return true;
+    } catch(e){
+      console.warn("Firebase initialization error:", e);
+      updateAuthUI();
+      return false;
+    }
+  }
+
+  function updateAuthUI(){
+    var cfg = getActiveFirebaseConfig();
+    var avatar = $("authAvatar");
+    var nameEl = $("authName");
+    var dot = $("syncDot");
+    var statusEl = $("syncStatusText");
+    var signInBtn = $("googleSignInBtn");
+    var signInLbl = $("googleSignInLabel");
+    var signOutBtn = $("signOutBtn");
+    var cfgBtn = $("firebaseCfgBtn");
+
+    var workouts = getWorkouts();
+    var unsyncedCount = workouts.filter(function(w){ return !w.synced; }).length;
+
+    if(!cfg){
+      avatar.innerHTML = "☁";
+      nameEl.textContent = "Local Storage Active";
+      dot.className = "status-dot warn";
+      statusEl.textContent = workouts.length + " workout" + (workouts.length === 1 ? "" : "s") + " saved on this device";
+      signInBtn.classList.remove("hidden");
+      signInLbl.textContent = "Connect Firebase for Google Sync";
+      signOutBtn.classList.add("hidden");
+      cfgBtn.classList.add("hidden");
+      return;
+    }
+
+    // Show Setup button when not signed in so user can update Firebase config if needed
+    cfgBtn.classList.toggle("hidden", Boolean(currentUser));
+
+    if(currentUser){
+      if(currentUser.photoURL){
+        avatar.innerHTML = '<img src="' + currentUser.photoURL + '" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+      } else {
+        var initial = (currentUser.displayName || currentUser.email || "U").charAt(0).toUpperCase();
+        avatar.textContent = initial;
+      }
+      nameEl.textContent = currentUser.displayName || currentUser.email || "Signed In";
+      if(isSyncing){
+        dot.className = "status-dot warn";
+        statusEl.textContent = "Syncing with Firestore…";
+      } else if(unsyncedCount === 0){
+        dot.className = "status-dot ok";
+        statusEl.textContent = "All workouts synced to cloud";
+      } else {
+        dot.className = "status-dot warn";
+        statusEl.textContent = unsyncedCount + " workout" + (unsyncedCount === 1 ? "" : "s") + " pending sync";
+      }
+      signInBtn.classList.add("hidden");
+      signOutBtn.classList.remove("hidden");
+    } else {
+      avatar.innerHTML = "☁";
+      nameEl.textContent = "Local Storage Active";
+      dot.className = "status-dot warn";
+      statusEl.textContent = "Sign in to sync across devices";
+      signInBtn.classList.remove("hidden");
+      signInLbl.textContent = "Sign in with Google";
+      signOutBtn.classList.add("hidden");
+    }
+  }
+
+  function handleGoogleSignIn(){
+    var cfg = getActiveFirebaseConfig();
+    if(!cfg){
+      openFirebaseModal();
+      return;
+    }
+    if(!fbAuth){
+      initFirebase();
+    }
+    if(!fbAuth){
+      alert("Firebase SDK could not be loaded. Check your internet connection.");
+      return;
+    }
+    var provider = new firebase.auth.GoogleAuthProvider();
+    fbAuth.signInWithPopup(provider).catch(function(err){
+      if(err && err.code === "auth/popup-blocked"){
+        fbAuth.signInWithRedirect(provider);
+      } else if(err && err.code !== "auth/popup-closed-by-user"){
+        alert("Sign-in error: " + (err.message || err));
+      }
+    });
+  }
+
+  function openFirebaseModal(){
+    var cfg = getActiveFirebaseConfig();
+    $("firebaseConfigInput").value = cfg ? JSON.stringify(cfg, null, 2) : "";
+    $("firebaseConfigErr").classList.add("hidden");
+    $("firebaseModal").classList.remove("hidden");
+  }
+
+  function closeFirebaseModal(){
+    $("firebaseModal").classList.add("hidden");
+  }
+
+  function openHistory(){
+    phase = "history";
+    show("history");
+    renderHistory();
+    if(currentUser && fbDb){
+      syncWithFirestore();
+    }
+  }
 
   function buildChips(){
     var presets = [[100, 20], [120, 20], [130, 20], [150, 20]], c = $("chips");
@@ -720,9 +1436,55 @@
   $("startBtn").addEventListener("click", start);
   $("stopBtn").addEventListener("click", stopEarly);
   $("doneBtn").addEventListener("click", reset);
+  $("doneHistoryBtn").addEventListener("click", openHistory);
   $("repeatBtn").addEventListener("click", start);
 
-  buildChips(); updateSetup();
+  $("historyBtn").addEventListener("click", openHistory);
+  $("historyBackBtn").addEventListener("click", reset);
+  $("googleSignInBtn").addEventListener("click", handleGoogleSignIn);
+  $("firebaseCfgBtn").addEventListener("click", openFirebaseModal);
+  $("signOutBtn").addEventListener("click", function(){
+    if(fbAuth) fbAuth.signOut();
+  });
+
+  $("cancelDeleteBtn").addEventListener("click", closeDeleteModal);
+  $("confirmDeleteBtn").addEventListener("click", function(){
+    if(pendingDeleteId){
+      var id = pendingDeleteId;
+      closeDeleteModal();
+      deleteWorkout(id);
+    }
+  });
+  $("deleteModal").addEventListener("click", function(e){
+    if(e.target === $("deleteModal")) closeDeleteModal();
+  });
+
+  $("cancelFirebaseBtn").addEventListener("click", closeFirebaseModal);
+  $("saveFirebaseBtn").addEventListener("click", function(){
+    var raw = $("firebaseConfigInput").value;
+    var parsed = parseFirebaseConfigSnippet(raw);
+    if(!parsed || !parsed.apiKey || !parsed.projectId){
+      var errEl = $("firebaseConfigErr");
+      errEl.textContent = "Invalid config. Make sure it includes at least apiKey, authDomain, and projectId.";
+      errEl.classList.remove("hidden");
+      return;
+    }
+    localStorage.setItem(FB_CFG_KEY, JSON.stringify(parsed));
+    closeFirebaseModal();
+    initFirebase();
+  });
+  $("firebaseModal").addEventListener("click", function(e){
+    if(e.target === $("firebaseModal")) closeFirebaseModal();
+  });
+
+  window.addEventListener("online", function(){
+    if(currentUser && fbDb) syncWithFirestore();
+  });
+
+  buildChips();
+  updateSetup();
+  updateHistoryBadge();
+  initFirebase();
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
