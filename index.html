@@ -101,6 +101,10 @@
   .stat .l{font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--muted);}
   .stat .v{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:28px; margin-top:4px;}
   .hidden{display:none !important;}
+  .btnStart[disabled]{opacity:0.35; pointer-events:none;}
+  .type-badge{font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:4px 10px; border-radius:999px; font-family:var(--disp);}
+  .type-badge.navy{background:rgba(66,133,244,0.15); color:#6EA8FE; border:1px solid rgba(66,133,244,0.35);}
+  .type-badge.six{background:rgba(168,85,247,0.15); color:#C084FC; border:1px solid rgba(168,85,247,0.35);}
 
   /* Header & Icon Buttons */
   .hdr-row{display:flex; justify-content:space-between; align-items:flex-start; margin-top:2px; margin-bottom:16px; gap:12px;}
@@ -194,6 +198,12 @@
     </button>
   </div>
 
+  <div class="field-label">Workout Type</div>
+  <div class="seg" id="typeSeg" style="margin-bottom:14px;">
+    <button data-type="navySeal">Navy Seal</button>
+    <button data-type="sixCount">Six Count</button>
+  </div>
+
   <div class="stepper" style="margin-bottom:14px;">
     <button class="stepBtn" data-step="reps" data-dir="-1">&minus;</button>
     <div class="numBox" style="flex-direction:column;gap:0;">
@@ -260,9 +270,6 @@
     <div class="big" id="paceMain">10m @ 7 reps  →  10m @ 6 reps</div>
     <div class="sub" id="paceSub">Step-Down (Front) · 20 rounds · Rest ~33s–37s</div>
   </div>
-
-  <div class="eyebrow" style="margin-top:18px;margin-bottom:10px;">Quick Benchmark Presets</div>
-  <div class="chips" id="chips"></div>
 
   <div class="spacer"></div>
   <button class="btnStart" id="startBtn">Start Workout</button>
@@ -369,6 +376,7 @@
     <div class="hist-tot"><div class="l">Total Time</div><div class="v tnum" id="totTime">0m</div></div>
   </div>
 
+  <div id="typeBreakdown" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
   <!-- Chronological Workout List -->
   <div id="histList" class="hist-list"></div>
 </div>
@@ -414,6 +422,7 @@
   var phase = "setup";
   var reps = 130, minutes = 20;
   var mode = "sets";           // continuous | sets
+  var workoutType = null;      // "navySeal" | "sixCount" | null
   var strategy = "front";      // front (step-down) | even | back (step-up)
   var blockSize = "1";         // "1" | "custom"
   var chosenSets = 20;        
@@ -630,6 +639,7 @@
     $("repsInput").value = reps;
     $("minutesInput").value = minutes;
     
+    document.querySelectorAll("#typeSeg button").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-type") === workoutType); });
     document.querySelectorAll("#modeSeg button").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-mode") === mode); });
     document.querySelectorAll("#strategySeg button").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-strategy") === strategy); });
     document.querySelectorAll("#blockSizeSeg button").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-block") === blockSize); });
@@ -663,6 +673,9 @@
       
       renderGridPreview(p);
     }
+    var startEl = $("startBtn");
+    if(!workoutType){ startEl.setAttribute("disabled","disabled"); startEl.textContent = "Select Workout Type"; }
+    else { startEl.removeAttribute("disabled"); startEl.textContent = "Start Workout"; }
   }
 
   function show(name){
@@ -795,7 +808,7 @@
     saveWorkout(p, cued, complete, finalElapsed);
     show("done");
   }
-  function reset(){ phase = "setup"; elapsed = 0; show("setup"); updateSetup(); }
+  function reset(){ phase = "setup"; elapsed = 0; workoutType = null; show("setup"); updateSetup(); }
 
   // ---- Local Storage & Cloud Sync (Firestore) ----
   var STORAGE_KEY = "burpee_pacer_workouts_v1";
@@ -876,8 +889,9 @@
       strategy: p.mode === "sets" ? strategy : "even",
       blockSize: p.mode === "sets" ? blockSize : "1",
       sets: p.sets.length,
-      cadence: repCadence,
+      cadence: p.mode === "sets" ? repCadence : null,
       minutes: minutes,
+      workoutType: workoutType || "navySeal",
       synced: false
     };
     var list = getWorkouts();
@@ -910,8 +924,9 @@
       strategy: rec.strategy,
       blockSize: rec.blockSize,
       sets: rec.sets,
-      cadence: rec.cadence,
-      minutes: rec.minutes
+      cadence: rec.mode === "sets" ? rec.cadence : null,
+      minutes: rec.minutes,
+      workoutType: rec.workoutType || "navySeal"
     };
   }
 
@@ -997,10 +1012,12 @@
         snapshot.forEach(function(doc){
           var data = doc.data();
           if(data && data.id){
+            if(!data.workoutType) data.workoutType = "navySeal";
             data.synced = true;
             if(!byId[data.id]){
               byId[data.id] = data;
             } else {
+              if(!byId[data.id].workoutType) byId[data.id].workoutType = data.workoutType;
               byId[data.id].synced = true;
             }
           }
@@ -1047,13 +1064,42 @@
     updateAuthUI();
     var list = getWorkouts();
     var totReps = 0, totSec = 0;
+    var nsCount = 0, nsReps = 0, nsSec = 0;
+    var scCount = 0, scReps = 0, scSec = 0;
     for(var i=0; i<list.length; i++){
-      totReps += (list[i].repsCompleted || 0);
-      totSec += (list[i].elapsedSeconds || 0);
+      var w_ = list[i];
+      totReps += (w_.repsCompleted || 0);
+      totSec += (w_.elapsedSeconds || 0);
+      if(w_.workoutType === "sixCount"){
+        scCount++; scReps += (w_.repsCompleted || 0); scSec += (w_.elapsedSeconds || 0);
+      } else {
+        nsCount++; nsReps += (w_.repsCompleted || 0); nsSec += (w_.elapsedSeconds || 0);
+      }
     }
     $("totWorkouts").textContent = String(list.length);
     $("totReps").textContent = totReps.toLocaleString();
     $("totTime").textContent = formatTotalDuration(totSec);
+    var breakdownEl = $("typeBreakdown");
+    if(breakdownEl){
+      var bhtml = '';
+      if(nsCount > 0){
+        bhtml += '<div class="hist-tot" style="grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:8px 12px;">';
+        bhtml += '<span class="type-badge navy" style="flex-shrink:0;">Navy Seal</span>';
+        bhtml += '<span class="v tnum" style="font-size:18px;">' + nsCount + '</span><span class="l" style="margin-right:8px;">workouts</span>';
+        bhtml += '<span class="v tnum" style="font-size:18px;">' + nsReps.toLocaleString() + '</span><span class="l" style="margin-right:8px;">reps</span>';
+        bhtml += '<span class="v tnum" style="font-size:18px;">' + formatTotalDuration(nsSec) + '</span><span class="l">time</span>';
+        bhtml += '</div>';
+      }
+      if(scCount > 0){
+        bhtml += '<div class="hist-tot" style="grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:8px 12px;">';
+        bhtml += '<span class="type-badge six" style="flex-shrink:0;">Six Count</span>';
+        bhtml += '<span class="v tnum" style="font-size:18px;">' + scCount + '</span><span class="l" style="margin-right:8px;">workouts</span>';
+        bhtml += '<span class="v tnum" style="font-size:18px;">' + scReps.toLocaleString() + '</span><span class="l" style="margin-right:8px;">reps</span>';
+        bhtml += '<span class="v tnum" style="font-size:18px;">' + formatTotalDuration(scSec) + '</span><span class="l">time</span>';
+        bhtml += '</div>';
+      }
+      breakdownEl.innerHTML = bhtml;
+    }
 
     var container = $("histList");
     if(list.length === 0){
@@ -1094,6 +1140,9 @@
       html += '  </div>';
 
       html += '  <div class="hist-tags">';
+      var typeLbl = (w.workoutType === "sixCount") ? "Six Count" : "Navy Seal";
+      var typeCls = (w.workoutType === "sixCount") ? "six" : "navy";
+      html += '    <span class="type-badge ' + typeCls + '">' + typeLbl + '</span>';
       html += '    <span class="hist-tag">' + modeTxt + '</span>';
       html += '    <span class="hist-tag">' + stratTxt + '</span>';
       if(w.mode === "sets" && w.sets){
@@ -1106,7 +1155,9 @@
       html += '    <div class="detail-grid">';
       html += '      <div class="detail-item"><div class="k">Completion</div><div class="val tnum">' + pct + '% (' + w.repsCompleted + '/' + w.repsTarget + ')</div></div>';
       html += '      <div class="detail-item"><div class="k">Avg Pace</div><div class="val tnum">' + rpm + '</div></div>';
-      html += '      <div class="detail-item"><div class="k">Cadence</div><div class="val tnum">' + (w.cadence ? w.cadence.toFixed(1) + 's / rep' : '—') + '</div></div>';
+      if(w.mode === "sets" && w.cadence){
+        html += '    <div class="detail-item"><div class="k">Cadence</div><div class="val tnum">' + w.cadence.toFixed(1) + 's / rep</div></div>';
+      }
       html += '      <div class="detail-item"><div class="k">Target Time</div><div class="val tnum">' + fmt(w.totalSeconds || (w.minutes * 60)) + '</div></div>';
       html += '    </div>';
       html += '    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">';
@@ -1148,6 +1199,7 @@
           reps = clampReps(w.repsTarget || 130);
           minutes = clampMin(w.minutes || Math.round((w.totalSeconds || 1200) / 60));
           mode = w.mode || "sets";
+          workoutType = w.workoutType || "navySeal";
           strategy = w.strategy || "front";
           blockSize = w.blockSize || "1";
           if(w.sets) chosenSets = clampSets(w.sets);
@@ -1338,19 +1390,7 @@
     }
   }
 
-  function buildChips(){
-    var presets = [[100, 20], [120, 20], [130, 20], [150, 20]], c = $("chips");
-    presets.forEach(function(pr){
-      var b = document.createElement("button"); b.className = "chip"; b.textContent = pr[0] + "×" + pr[1] + "m";
-      b.addEventListener("click", function(){
-        reps = pr[0];
-        minutes = pr[1];
-        autoAdaptCadence();
-        updateSetup();
-      });
-      c.appendChild(b);
-    });
-  }
+
   
   document.querySelectorAll(".stepBtn").forEach(function(btn){
     btn.addEventListener("click", function(){
@@ -1432,6 +1472,13 @@
       updateSetup();
     });
   });
+
+  document.querySelectorAll("#typeSeg button").forEach(function(b){
+    b.addEventListener("click", function(){
+      workoutType = b.getAttribute("data-type");
+      updateSetup();
+    });
+  });
   
   $("startBtn").addEventListener("click", start);
   $("stopBtn").addEventListener("click", stopEarly);
@@ -1481,10 +1528,18 @@
     if(currentUser && fbDb) syncWithFirestore();
   });
 
-  buildChips();
   updateSetup();
   updateHistoryBadge();
   initFirebase();
+
+  // Migrate legacy workouts without workoutType
+  (function(){
+    var wl = getWorkouts(), changed = false;
+    for(var i=0; i<wl.length; i++){
+      if(!wl[i].workoutType){ wl[i].workoutType = "navySeal"; changed = true; }
+    }
+    if(changed) setWorkouts(wl);
+  })();
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
