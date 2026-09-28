@@ -166,6 +166,50 @@
   .detail-item .k{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);}
   .detail-item .val{font-family:var(--disp); font-weight:800; font-size:16px; color:var(--textHi); margin-top:2px;}
 
+  /* Workout Notes */
+  .done-notes-wrap{margin-top:16px; width:100%; text-align:left;}
+  .done-notes-input{width:100%; min-height:76px; background:var(--surface); border:1px solid var(--line); border-radius:14px; color:var(--textHi); font-family:var(--ui); font-size:14px; line-height:1.45; padding:11px 14px; resize:vertical; outline:none; -webkit-user-select:text; user-select:text; transition:border-color 0.15s ease;}
+  .done-notes-input:focus{border-color:var(--idle);}
+  .done-notes-input::placeholder{color:var(--muted);}
+  .hist-note-preview{margin-top:10px; padding:8px 11px; background:var(--surface2); border-left:3px solid var(--idle); border-radius:4px 10px 10px 4px; font-size:13px; color:var(--textHi); line-height:1.45; white-space:pre-wrap; word-break:break-word;}
+  .hist-note-edit{display:flex; flex-direction:column; gap:6px; margin-top:4px;}
+  .hist-note-textarea{width:100%; min-height:64px; background:var(--ink); border:1px solid var(--line); border-radius:10px; color:var(--textHi); font-family:var(--ui); font-size:13px; line-height:1.4; padding:9px 11px; resize:vertical; outline:none; -webkit-user-select:text; user-select:text; transition:border-color 0.15s ease;}
+  .hist-note-textarea:focus{border-color:var(--idle);}
+  .hist-note-textarea::placeholder{color:var(--muted);}
+
+  /* History Filters & Calendar */
+  .filter-bar{display:flex; flex-direction:column; gap:8px; margin-bottom:14px;}
+  .filter-row{display:flex; gap:8px; align-items:stretch;}
+  .filter-row .seg{flex:1; padding:4px; border-radius:12px;}
+  .filter-row .seg button{padding:8px 6px; font-size:12.5px; border-radius:8px;}
+  .cal-toggle-btn{padding:0 13px; border-radius:12px; background:var(--surface); border:1px solid var(--line); color:var(--muted); font-size:12.5px; font-weight:600; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; transition:all 0.15s ease;}
+  .cal-toggle-btn.on{background:var(--surface2); color:var(--textHi); border-color:var(--line);}
+  .cal-toggle-btn.has-date{background:rgba(232,163,61,0.14); color:var(--idle); border-color:rgba(232,163,61,0.45);}
+  .cal-toggle-btn svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .filter-banner{display:flex; align-items:center; justify-content:space-between; gap:8px; background:rgba(232,163,61,0.12); border:1px solid rgba(232,163,61,0.35); border-radius:12px; padding:8px 12px; font-size:12.5px; color:var(--idle); font-weight:600; margin-bottom:12px;}
+  .filter-banner button{background:var(--surface2); border:1px solid var(--line); color:var(--textHi); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; padding:4px 9px; border-radius:7px;}
+
+  .cal-card{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; margin-bottom:14px; display:flex; flex-direction:column; gap:10px;}
+  .cal-hdr{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .cal-title{font-family:var(--disp); font-weight:800; font-size:20px; letter-spacing:.03em; text-transform:uppercase; color:var(--textHi);}
+  .cal-nav{display:flex; align-items:center; gap:6px;}
+  .cal-nav-btn{height:30px; min-width:30px; padding:0 8px; border-radius:8px; background:var(--surface2); border:1px solid var(--line); color:var(--textHi); display:inline-flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;}
+  .cal-nav-btn:active{background:var(--line);}
+  .cal-dow{display:grid; grid-template-columns:repeat(7, 1fr); gap:4px; text-align:center; font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
+  .cal-grid{display:grid; grid-template-columns:repeat(7, 1fr); gap:4px;}
+  .cal-cell{aspect-ratio:1/1; min-height:38px; border-radius:10px; background:var(--surface2); border:1px solid transparent; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer; font-family:var(--disp); font-weight:700; font-size:14px; color:var(--muted); transition:all 0.12s ease;}
+  .cal-cell.empty{background:transparent; pointer-events:none;}
+  .cal-cell.has-workout{color:var(--textHi); border-color:var(--line); background:#2A221C;}
+  .cal-cell.today{border-color:rgba(245,239,230,0.35); color:var(--textHi);}
+  .cal-cell.selected{background:rgba(232,163,61,0.2) !important; border-color:var(--idle) !important; color:var(--idle) !important; box-shadow:inset 0 0 0 1px var(--idle);}
+  .cal-dots{display:flex; gap:3px; height:5px; align-items:center; justify-content:center;}
+  .cal-dot{width:5px; height:5px; border-radius:50%;}
+  .cal-dot.navy{background:#6EA8FE;}
+  .cal-dot.six{background:#C084FC;}
+  .cal-footer{display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--muted); padding-top:6px; border-top:1px solid var(--line);}
+  .cal-legend{display:flex; align-items:center; gap:10px;}
+  .cal-legend-item{display:inline-flex; align-items:center; gap:5px;}
+
   /* Confirmation & Config Modal */
   .modal-backdrop{position:fixed; inset:0; background:rgba(10,8,7,0.78); display:flex; align-items:center; justify-content:center; padding:20px; z-index:100;}
   .modal-box{width:100%; max-width:380px; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:20px; display:flex; flex-direction:column; gap:14px;}
@@ -316,7 +360,11 @@
     <div class="stat"><div class="l">Time</div><div class="v" id="doneTime">20:00</div></div>
     <div class="stat"><div class="l" id="donePaceL">Format</div><div class="v" id="donePace">20 rounds</div></div>
   </div>
-  <p class="hint" id="doneSavedHint" style="margin-top:14px;color:var(--go);">✓ Workout saved to history</p>
+  <div class="done-notes-wrap">
+    <div class="field-label" style="margin-bottom:6px;">Workout Notes</div>
+    <textarea id="doneNotesInput" class="done-notes-input" placeholder="How did it feel? Add notes for this workout..."></textarea>
+  </div>
+  <p class="hint" id="doneSavedHint" style="margin-top:12px;color:var(--go);">✓ Workout saved to history</p>
   <div class="spacer"></div>
   <div style="width:100%;">
     <button class="btnStart" id="doneBtn">Done</button>
@@ -367,6 +415,61 @@
       </svg>
       <span id="googleSignInLabel">Sign in with Google to sync</span>
     </button>
+  </div>
+
+  <!-- Filter Bar & Calendar Toggle -->
+  <div class="filter-bar">
+    <div class="filter-row">
+      <div class="seg" id="histTypeSeg">
+        <button data-ftype="all" class="on">All Types</button>
+        <button data-ftype="navySeal">Navy Seal</button>
+        <button data-ftype="sixCount">Six Count</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="seg" id="histScopeSeg">
+        <button data-fscope="all" class="on">All Time</button>
+        <button data-fscope="month" id="histScopeMonthBtn">This Month</button>
+      </div>
+      <button class="cal-toggle-btn" id="calToggleBtn" title="Toggle Calendar">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span id="calToggleLabel">Calendar</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Expandable Monthly Calendar -->
+  <div id="calCard" class="cal-card hidden">
+    <div class="cal-hdr">
+      <div class="cal-title" id="calTitle">September 2026</div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" id="calPrevBtn" title="Previous Month" aria-label="Previous Month">&lsaquo;</button>
+        <button class="cal-nav-btn" id="calTodayBtn" title="Jump to Today">Today</button>
+        <button class="cal-nav-btn" id="calNextBtn" title="Next Month" aria-label="Next Month">&rsaquo;</button>
+      </div>
+    </div>
+    <div class="cal-dow">
+      <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-footer">
+      <div class="cal-legend">
+        <span class="cal-legend-item"><span class="cal-dot navy"></span> Navy Seal</span>
+        <span class="cal-legend-item"><span class="cal-dot six"></span> Six Count</span>
+      </div>
+      <span id="calHintText">Tap a day to filter</span>
+    </div>
+  </div>
+
+  <!-- Active Date Filter Banner -->
+  <div id="filterBanner" class="filter-banner hidden">
+    <span id="filterBannerText">Showing workouts for selected date</span>
+    <button id="clearFilterBtn">Show All</button>
   </div>
 
   <!-- Summary Totals -->
@@ -790,6 +893,8 @@
     show("run"); render(); startLoop();
   }
   function stopEarly(){ finish(repsDoneAt(plan, elapsed)); }
+  var lastSavedWorkoutId = null;
+
   function finish(cued){
     stopLoop(); releaseWake();
     finalReps = cued; phase = "done";
@@ -805,10 +910,12 @@
     if(p.mode === "sets"){ $("donePaceL").textContent = "Format"; $("donePace").textContent = p.sets.length + " rounds"; }
     else { $("donePaceL").textContent = "Pace"; $("donePace").textContent = "1 / " + fmtPace(p.bt); }
 
-    saveWorkout(p, cued, complete, finalElapsed);
+    if($("doneNotesInput")) $("doneNotesInput").value = "";
+    var saved = saveWorkout(p, cued, complete, finalElapsed);
+    lastSavedWorkoutId = saved ? saved.id : null;
     show("done");
   }
-  function reset(){ phase = "setup"; elapsed = 0; workoutType = null; show("setup"); updateSetup(); }
+  function reset(){ saveDoneNotes(); phase = "setup"; elapsed = 0; workoutType = null; show("setup"); updateSetup(); }
 
   // ---- Local Storage & Cloud Sync (Firestore) ----
   var STORAGE_KEY = "burpee_pacer_workouts_v1";
@@ -829,6 +936,53 @@
   var isSyncing = false;
   var pendingDeleteId = null;
   var expandedCardIds = {};
+
+  // History Filter & Calendar state
+  var histTypeFilter = "all"; // "all" | "navySeal" | "sixCount"
+  var histDateScope = "all";  // "all" | "month" | "day"
+  var calOpen = false;
+  var initNow = new Date();
+  var calYear = initNow.getFullYear();
+  var calMonth = initNow.getMonth();
+  var selectedDateKey = null; // "YYYY-MM-DD"
+
+  var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var SHORT_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  function escapeHtml(str){
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function toDateKey(isoOrDate){
+    var d = (isoOrDate instanceof Date) ? isoOrDate : new Date(isoOrDate);
+    if(isNaN(d.getTime())) return "";
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + day;
+  }
+
+  function formatDateKeyReadable(dateKey){
+    if(!dateKey) return "";
+    var parts = dateKey.split("-");
+    if(parts.length !== 3) return dateKey;
+    var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    return d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+  }
+
+  function formatDateKeyShort(dateKey){
+    if(!dateKey) return "Calendar";
+    var parts = dateKey.split("-");
+    if(parts.length !== 3) return "Calendar";
+    var mIdx = parseInt(parts[1], 10) - 1;
+    var dayNum = parseInt(parts[2], 10);
+    return dayNum + " " + (SHORT_MONTHS[mIdx] || "");
+  }
 
   function generateId(){
     if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -877,9 +1031,11 @@
   }
 
   function saveWorkout(p, cued, complete, elapsedSec){
+    var nowIso = new Date().toISOString();
     var rec = {
       id: generateId(),
-      timestamp: new Date().toISOString(),
+      timestamp: nowIso,
+      updatedAt: nowIso,
       repsCompleted: cued,
       repsTarget: p.totalReps,
       completed: Boolean(complete),
@@ -892,6 +1048,7 @@
       cadence: p.mode === "sets" ? repCadence : null,
       minutes: minutes,
       workoutType: workoutType || "navySeal",
+      notes: "",
       synced: false
     };
     var list = getWorkouts();
@@ -911,10 +1068,48 @@
     return rec;
   }
 
+  function updateWorkoutNotes(id, noteText, isFromDone){
+    if(!id) return false;
+    var list = getWorkouts();
+    var target = null;
+    for(var i=0; i<list.length; i++){
+      if(list[i].id === id){
+        target = list[i];
+        break;
+      }
+    }
+    if(!target) return false;
+    var cleanNote = String(noteText || "").trim();
+    if((target.notes || "") === cleanNote) return false;
+
+    target.notes = cleanNote;
+    target.updatedAt = new Date().toISOString();
+    target.synced = false;
+    setWorkouts(list);
+
+    var hint = $("doneSavedHint");
+    if(isFromDone && hint){
+      hint.textContent = currentUser ? "✓ Note saved · Syncing to cloud…" : "✓ Workout & note saved to history";
+    }
+
+    if(currentUser && fbDb){
+      pushSingleWorkout(target).then(function(ok){
+        if(ok && isFromDone && hint) hint.textContent = "✓ Workout & note synced to cloud";
+      });
+    }
+    return true;
+  }
+
+  function saveDoneNotes(){
+    if(!lastSavedWorkoutId || !$("doneNotesInput")) return;
+    updateWorkoutNotes(lastSavedWorkoutId, $("doneNotesInput").value, true);
+  }
+
   function toFirestoreData(rec){
     return {
       id: rec.id,
       timestamp: rec.timestamp,
+      updatedAt: rec.updatedAt || rec.timestamp,
       repsCompleted: rec.repsCompleted,
       repsTarget: rec.repsTarget,
       completed: rec.completed,
@@ -926,7 +1121,8 @@
       sets: rec.sets,
       cadence: rec.mode === "sets" ? rec.cadence : null,
       minutes: rec.minutes,
-      workoutType: rec.workoutType || "navySeal"
+      workoutType: rec.workoutType || "navySeal",
+      notes: rec.notes || ""
     };
   }
 
@@ -1013,11 +1209,16 @@
           var data = doc.data();
           if(data && data.id){
             if(!data.workoutType) data.workoutType = "navySeal";
+            if(typeof data.notes !== "string") data.notes = "";
             data.synced = true;
             if(!byId[data.id]){
               byId[data.id] = data;
             } else {
               if(!byId[data.id].workoutType) byId[data.id].workoutType = data.workoutType;
+              if(data.notes && !byId[data.id].notes) byId[data.id].notes = data.notes;
+              else if(typeof data.notes === "string" && (!byId[data.id].updatedAt || (data.updatedAt && data.updatedAt >= byId[data.id].updatedAt))){
+                byId[data.id].notes = data.notes;
+              }
               byId[data.id].synced = true;
             }
           }
@@ -1060,9 +1261,142 @@
     return "Even EMOM";
   }
 
+  function renderCalendar(allWorkouts){
+    var calCard = $("calCard");
+    if(!calCard) return;
+    calCard.classList.toggle("hidden", !calOpen);
+    if(!calOpen) return;
+
+    $("calTitle").textContent = MONTH_NAMES[calMonth] + " " + calYear;
+
+    // Map workouts by YYYY-MM-DD (respecting active workoutType filter)
+    var dayMap = {};
+    for(var i=0; i<allWorkouts.length; i++){
+      var w = allWorkouts[i];
+      var wType = w.workoutType || "navySeal";
+      if(histTypeFilter !== "all" && wType !== histTypeFilter) continue;
+      var dk = toDateKey(w.timestamp);
+      if(!dk) continue;
+      if(!dayMap[dk]) dayMap[dk] = { navy: false, six: false, count: 0 };
+      if(wType === "sixCount") dayMap[dk].six = true;
+      else dayMap[dk].navy = true;
+      dayMap[dk].count++;
+    }
+
+    var firstDay = new Date(calYear, calMonth, 1);
+    var startOffset = (firstDay.getDay() + 6) % 7; // Monday = 0 .. Sunday = 6
+    var daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    var todayKey = toDateKey(new Date());
+
+    var ghtml = "";
+    for(var e=0; e<startOffset; e++){
+      ghtml += '<div class="cal-cell empty"></div>';
+    }
+    for(var d=1; d<=daysInMonth; d++){
+      var mStr = String(calMonth + 1).padStart(2, "0");
+      var dStr = String(d).padStart(2, "0");
+      var key = calYear + "-" + mStr + "-" + dStr;
+      var info = dayMap[key];
+      var cls = "cal-cell";
+      if(info && info.count > 0) cls += " has-workout";
+      if(key === todayKey) cls += " today";
+      if(histDateScope === "day" && selectedDateKey === key) cls += " selected";
+
+      var dotsHtml = '<div class="cal-dots">';
+      if(info){
+        if(info.navy) dotsHtml += '<span class="cal-dot navy"></span>';
+        if(info.six) dotsHtml += '<span class="cal-dot six"></span>';
+      }
+      dotsHtml += '</div>';
+
+      ghtml += '<div class="' + cls + '" data-date="' + key + '"><span>' + d + '</span>' + dotsHtml + '</div>';
+    }
+
+    var gridEl = $("calGrid");
+    gridEl.innerHTML = ghtml;
+
+    var hintEl = $("calHintText");
+    if(hintEl){
+      hintEl.textContent = (histDateScope === "day" && selectedDateKey) ? "Tap selected day to clear" : "Tap a day to filter";
+    }
+
+    gridEl.querySelectorAll(".cal-cell[data-date]").forEach(function(cell){
+      cell.addEventListener("click", function(){
+        var clickedKey = cell.getAttribute("data-date");
+        if(histDateScope === "day" && selectedDateKey === clickedKey){
+          selectedDateKey = null;
+          histDateScope = "all";
+        } else {
+          selectedDateKey = clickedKey;
+          histDateScope = "day";
+        }
+        renderHistory();
+      });
+    });
+  }
+
   function renderHistory(){
     updateAuthUI();
-    var list = getWorkouts();
+    var allWorkouts = getWorkouts();
+
+    // Update filter control states
+    document.querySelectorAll("#histTypeSeg button").forEach(function(b){
+      b.classList.toggle("on", b.getAttribute("data-ftype") === histTypeFilter);
+    });
+    document.querySelectorAll("#histScopeSeg button").forEach(function(b){
+      b.classList.toggle("on", b.getAttribute("data-fscope") === histDateScope);
+    });
+
+    var now = new Date();
+    var monthBtn = $("histScopeMonthBtn");
+    if(monthBtn){
+      var isCurrentMonth = (calYear === now.getFullYear() && calMonth === now.getMonth());
+      monthBtn.textContent = isCurrentMonth ? "This Month" : (SHORT_MONTHS[calMonth] + " " + calYear);
+    }
+
+    var calBtn = $("calToggleBtn");
+    var calLbl = $("calToggleLabel");
+    if(calBtn && calLbl){
+      var hasDay = (histDateScope === "day" && Boolean(selectedDateKey));
+      calBtn.classList.toggle("on", calOpen);
+      calBtn.classList.toggle("has-date", hasDay);
+      calLbl.textContent = hasDay ? formatDateKeyShort(selectedDateKey) : "Calendar";
+    }
+
+    renderCalendar(allWorkouts);
+
+    // Filter workouts according to active Workout Type and Date Scope
+    var list = allWorkouts.filter(function(w){
+      var wType = w.workoutType || "navySeal";
+      if(histTypeFilter !== "all" && wType !== histTypeFilter) return false;
+      if(histDateScope === "day" && selectedDateKey){
+        return toDateKey(w.timestamp) === selectedDateKey;
+      }
+      if(histDateScope === "month"){
+        var d = new Date(w.timestamp);
+        return d.getFullYear() === calYear && d.getMonth() === calMonth;
+      }
+      return true;
+    });
+
+    // Update Active Filter Banner
+    var banner = $("filterBanner");
+    var bannerTxt = $("filterBannerText");
+    if(banner && bannerTxt){
+      var parts = [];
+      if(histTypeFilter === "navySeal") parts.push("Navy Seal");
+      else if(histTypeFilter === "sixCount") parts.push("Six Count");
+      if(histDateScope === "day" && selectedDateKey) parts.push(formatDateKeyReadable(selectedDateKey));
+      else if(histDateScope === "month") parts.push(MONTH_NAMES[calMonth] + " " + calYear);
+
+      if(parts.length > 0){
+        bannerTxt.textContent = "Filtered: " + parts.join(" \u00b7 ");
+        banner.classList.remove("hidden");
+      } else {
+        banner.classList.add("hidden");
+      }
+    }
+
     var totReps = 0, totSec = 0;
     var nsCount = 0, nsReps = 0, nsSec = 0;
     var scCount = 0, scReps = 0, scSec = 0;
@@ -1103,11 +1437,19 @@
 
     var container = $("histList");
     if(list.length === 0){
-      container.innerHTML =
-        '<div class="hist-empty">' +
-        '  <div class="big">No Workouts Yet</div>' +
-        '  <div>Complete or stop a workout and your stats will automatically be saved here.</div>' +
-        '</div>';
+      if(allWorkouts.length === 0){
+        container.innerHTML =
+          '<div class="hist-empty">' +
+          '  <div class="big">No Workouts Yet</div>' +
+          '  <div>Complete or stop a workout and your stats will automatically be saved here.</div>' +
+          '</div>';
+      } else {
+        container.innerHTML =
+          '<div class="hist-empty">' +
+          '  <div class="big">No Matching Workouts</div>' +
+          '  <div>No workouts found for the selected filter or date.</div>' +
+          '</div>';
+      }
       return;
     }
 
@@ -1122,6 +1464,7 @@
       var rpm = w.elapsedSeconds > 0 ? ((w.repsCompleted / (w.elapsedSeconds / 60)).toFixed(1) + " / min") : "—";
       var syncText = w.synced ? "Synced to cloud" : "Saved locally";
       var syncIcon = w.synced ? '<span title="Synced to cloud" style="color:var(--go);">✓</span>' : '<span title="Saved locally" style="color:var(--idle);">●</span>';
+      var noteStr = (w.notes || "").trim();
 
       html += '<div class="hist-card ' + (isExp ? 'expanded' : '') + '" data-id="' + w.id + '">';
       html += '  <div class="hist-card-top">';
@@ -1151,6 +1494,10 @@
       html += '    <span class="hist-chevron">' + (isExp ? 'Hide ▲' : 'Details ▼') + '</span>';
       html += '  </div>';
 
+      if(noteStr){
+        html += '  <div class="hist-note-preview">' + escapeHtml(noteStr) + '</div>';
+      }
+
       html += '  <div class="hist-detail">';
       html += '    <div class="detail-grid">';
       html += '      <div class="detail-item"><div class="k">Completion</div><div class="val tnum">' + pct + '% (' + w.repsCompleted + '/' + w.repsTarget + ')</div></div>';
@@ -1159,6 +1506,13 @@
         html += '    <div class="detail-item"><div class="k">Cadence</div><div class="val tnum">' + w.cadence.toFixed(1) + 's / rep</div></div>';
       }
       html += '      <div class="detail-item"><div class="k">Target Time</div><div class="val tnum">' + fmt(w.totalSeconds || (w.minutes * 60)) + '</div></div>';
+      html += '    </div>';
+      html += '    <div class="hist-note-edit">';
+      html += '      <div class="field-label" style="margin-bottom:2px;font-size:10.5px;">Workout Notes</div>';
+      html += '      <textarea class="hist-note-textarea" data-note-input="' + w.id + '" placeholder="Add or edit notes for this workout...">' + escapeHtml(noteStr) + '</textarea>';
+      html += '      <div style="display:flex;justify-content:flex-end;">';
+      html += '        <button class="btn-sm" data-save-note="' + w.id + '" style="color:var(--idle);border-color:rgba(232,163,61,0.35);">Save Note</button>';
+      html += '      </div>';
       html += '    </div>';
       html += '    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">';
       html += '      <span style="font-size:11.5px;color:var(--muted);">Status: ' + syncText + '</span>';
@@ -1170,15 +1524,42 @@
 
     container.innerHTML = html;
 
-    // Bind card expansion, delete buttons, and load settings buttons
+    // Bind card expansion, delete buttons, note saving, and load settings buttons
     container.querySelectorAll(".hist-card").forEach(function(card){
       card.addEventListener("click", function(e){
-        if(e.target.closest("[data-del]") || e.target.closest("[data-load]")) return;
+        if(
+          e.target.closest("[data-del]") ||
+          e.target.closest("[data-load]") ||
+          e.target.closest("[data-note-input]") ||
+          e.target.closest("[data-save-note]")
+        ) return;
         var id = card.getAttribute("data-id");
         expandedCardIds[id] = !expandedCardIds[id];
         card.classList.toggle("expanded", Boolean(expandedCardIds[id]));
         var chev = card.querySelector(".hist-chevron");
         if(chev) chev.textContent = expandedCardIds[id] ? "Hide ▲" : "Details ▼";
+      });
+    });
+
+    container.querySelectorAll("[data-note-input]").forEach(function(ta){
+      ta.addEventListener("click", function(e){ e.stopPropagation(); });
+    });
+
+    container.querySelectorAll("[data-save-note]").forEach(function(btn){
+      btn.addEventListener("click", function(e){
+        e.stopPropagation();
+        var id = btn.getAttribute("data-save-note");
+        var ta = container.querySelector('[data-note-input="' + id + '"]');
+        if(ta){
+          var changed = updateWorkoutNotes(id, ta.value, false);
+          btn.textContent = "✓ Saved";
+          setTimeout(function(){
+            renderHistory();
+          }, 350);
+          if(!changed){
+            renderHistory();
+          }
+        }
       });
     });
 
@@ -1382,6 +1763,7 @@
   }
 
   function openHistory(){
+    saveDoneNotes();
     phase = "history";
     show("history");
     renderHistory();
@@ -1479,12 +1861,64 @@
       updateSetup();
     });
   });
+
+  // History Filter & Calendar Event Listeners
+  document.querySelectorAll("#histTypeSeg button").forEach(function(b){
+    b.addEventListener("click", function(){
+      histTypeFilter = b.getAttribute("data-ftype") || "all";
+      renderHistory();
+    });
+  });
+
+  document.querySelectorAll("#histScopeSeg button").forEach(function(b){
+    b.addEventListener("click", function(){
+      var sc = b.getAttribute("data-fscope") || "all";
+      histDateScope = sc;
+      selectedDateKey = null;
+      renderHistory();
+    });
+  });
+
+  $("calToggleBtn").addEventListener("click", function(){
+    calOpen = !calOpen;
+    renderHistory();
+  });
+
+  $("calPrevBtn").addEventListener("click", function(){
+    calMonth--;
+    if(calMonth < 0){ calMonth = 11; calYear--; }
+    renderHistory();
+  });
+
+  $("calNextBtn").addEventListener("click", function(){
+    calMonth++;
+    if(calMonth > 11){ calMonth = 0; calYear++; }
+    renderHistory();
+  });
+
+  $("calTodayBtn").addEventListener("click", function(){
+    var t = new Date();
+    calYear = t.getFullYear();
+    calMonth = t.getMonth();
+    selectedDateKey = toDateKey(t);
+    histDateScope = "day";
+    renderHistory();
+  });
+
+  $("clearFilterBtn").addEventListener("click", function(){
+    histTypeFilter = "all";
+    histDateScope = "all";
+    selectedDateKey = null;
+    renderHistory();
+  });
+
+  $("doneNotesInput").addEventListener("blur", saveDoneNotes);
   
   $("startBtn").addEventListener("click", start);
   $("stopBtn").addEventListener("click", stopEarly);
   $("doneBtn").addEventListener("click", reset);
   $("doneHistoryBtn").addEventListener("click", openHistory);
-  $("repeatBtn").addEventListener("click", start);
+  $("repeatBtn").addEventListener("click", function(){ saveDoneNotes(); start(); });
 
   $("historyBtn").addEventListener("click", openHistory);
   $("historyBackBtn").addEventListener("click", reset);
@@ -1532,11 +1966,12 @@
   updateHistoryBadge();
   initFirebase();
 
-  // Migrate legacy workouts without workoutType
+  // Migrate legacy workouts without workoutType or notes
   (function(){
     var wl = getWorkouts(), changed = false;
     for(var i=0; i<wl.length; i++){
       if(!wl[i].workoutType){ wl[i].workoutType = "navySeal"; changed = true; }
+      if(typeof wl[i].notes !== "string"){ wl[i].notes = ""; changed = true; }
     }
     if(changed) setWorkouts(wl);
   })();
