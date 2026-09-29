@@ -147,9 +147,18 @@
   .badge-pill{font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; border-radius:999px; font-family:var(--disp);}
   .badge-pill.complete{background:rgba(59,209,122,0.14); color:var(--go); border:1px solid rgba(59,209,122,0.35);}
   .badge-pill.partial{background:rgba(232,163,61,0.14); color:var(--idle); border:1px solid rgba(232,163,61,0.35);}
-  .del-btn{width:32px; height:32px; border-radius:8px; background:transparent; color:var(--muted); display:inline-flex; align-items:center; justify-content:center; transition:color 0.15s ease, background 0.15s ease;}
+  .del-btn, .edit-btn{width:32px; height:32px; border-radius:8px; background:transparent; color:var(--muted); display:inline-flex; align-items:center; justify-content:center; transition:color 0.15s ease, background 0.15s ease;}
   .del-btn:hover, .del-btn:active{color:var(--warn); background:rgba(242,92,54,0.12);}
-  .del-btn svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .edit-btn:hover, .edit-btn:active{color:var(--idle); background:rgba(232,163,61,0.12);}
+  .del-btn svg, .edit-btn svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+  .done-edit-btn{display:inline-flex; align-items:center; justify-content:center; gap:6px; margin-top:12px; background:var(--surface2); border:1px solid var(--line); color:var(--idle); border-radius:999px; padding:7px 14px; font-size:12.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-family:var(--disp); transition:background 0.15s ease, border-color 0.15s ease;}
+  .done-edit-btn:active{background:var(--line);}
+  .done-edit-btn svg{width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;}
+  .done-editable{cursor:pointer; transition:opacity 0.15s ease;}
+  .done-editable:active{opacity:0.75;}
+  .modal-stepper .stepBtn{width:54px; min-height:62px; font-size:28px;}
+  .modal-stepper .numBox{min-height:62px;}
+  .modal-stepper .numBox input{font-size:34px; -webkit-user-select:text; user-select:text;}
 
   .hist-main{display:flex; justify-content:space-between; align-items:baseline; margin-top:8px; gap:10px;}
   .hist-reps{font-family:var(--disp); font-weight:800; font-stretch:condensed; font-size:32px; line-height:1; color:var(--textHi);}
@@ -353,11 +362,15 @@
 <div id="done" class="wrap doneWrap hidden">
   <div style="text-align:center;">
     <div class="eyebrow" id="doneTitle" style="color:var(--go);">Workout complete</div>
-    <div class="doneNum" id="doneNum" style="font-size:clamp(110px,34vw,180px);color:var(--go);">130</div>
+    <div class="doneNum done-editable" id="doneNum" title="Tap to edit reps" style="font-size:clamp(110px,34vw,180px);color:var(--go);">130</div>
     <div style="color:var(--muted);font-size:16px;">of <span id="doneTotal">130</span> reps cued</div>
+    <button class="done-edit-btn" id="doneEditBtn" type="button">
+      <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+      <span>Edit Reps / Time</span>
+    </button>
   </div>
   <div class="stats">
-    <div class="stat"><div class="l">Time</div><div class="v" id="doneTime">20:00</div></div>
+    <div class="stat done-editable" id="doneTimeStat" title="Tap to edit workout time"><div class="l">Time</div><div class="v" id="doneTime">20:00</div></div>
     <div class="stat"><div class="l" id="donePaceL">Format</div><div class="v" id="donePace">20 rounds</div></div>
   </div>
   <div class="done-notes-wrap">
@@ -482,6 +495,38 @@
   <div id="typeBreakdown" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
   <!-- Chronological Workout List -->
   <div id="histList" class="hist-list"></div>
+</div>
+
+<!-- EDIT WORKOUT MODAL -->
+<div id="editModal" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <div class="modal-title">Edit Workout</div>
+    <div class="modal-body" id="editModalSubtitle" style="margin-top:-6px;font-size:12.5px;">Adjust actual reps completed and workout length.</div>
+    <div>
+      <div class="field-label" id="editRepsLabel">Actual Reps (Target: 130)</div>
+      <div class="stepper modal-stepper">
+        <button class="stepBtn" type="button" data-edit-step="reps" data-dir="-1">&minus;</button>
+        <div class="numBox">
+          <input id="editRepsInput" inputmode="numeric" value="130">
+        </div>
+        <button class="stepBtn" type="button" data-edit-step="reps" data-dir="1">+</button>
+      </div>
+    </div>
+    <div>
+      <div class="field-label">Duration (MM:SS or Minutes)</div>
+      <div class="stepper modal-stepper">
+        <button class="stepBtn" type="button" data-edit-step="time" data-dir="-1">&minus;</button>
+        <div class="numBox">
+          <input id="editTimeInput" type="text" value="20:00">
+        </div>
+        <button class="stepBtn" type="button" data-edit-step="time" data-dir="1">+</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" type="button" id="cancelEditBtn">Cancel</button>
+      <button class="btn-confirm" type="button" id="saveEditBtn">Save</button>
+    </div>
+  </div>
 </div>
 
 <!-- DELETE CONFIRMATION MODAL -->
@@ -1105,6 +1150,54 @@
     updateWorkoutNotes(lastSavedWorkoutId, $("doneNotesInput").value, true);
   }
 
+  function updateWorkoutStats(id, newReps, newElapsedSec){
+    if(!id) return false;
+    var list = getWorkouts();
+    var target = null;
+    for(var i=0; i<list.length; i++){
+      if(list[i].id === id){
+        target = list[i];
+        break;
+      }
+    }
+    if(!target) return false;
+
+    var cleanReps = clamp(Math.round(newReps), 0, 9999);
+    var cleanSec = clamp(Math.round(newElapsedSec), 1, 36000);
+    var newCompleted = cleanReps >= (target.repsTarget || 1);
+
+    target.repsCompleted = cleanReps;
+    target.elapsedSeconds = cleanSec;
+    target.completed = Boolean(newCompleted);
+    target.updatedAt = new Date().toISOString();
+    target.synced = false;
+    setWorkouts(list);
+
+    var isFromDone = (phase === "done" && id === lastSavedWorkoutId);
+    if(isFromDone){
+      finalReps = cleanReps;
+      $("doneTitle").textContent = newCompleted ? "Workout complete" : "Stopped early";
+      $("doneTitle").style.color = newCompleted ? "var(--go)" : "var(--idle)";
+      $("doneNum").textContent = String(cleanReps);
+      $("doneNum").style.color = newCompleted ? "var(--go)" : "var(--textHi)";
+      $("doneTime").textContent = fmt(cleanSec);
+      var hint = $("doneSavedHint");
+      if(hint){
+        hint.textContent = currentUser ? "✓ Workout updated · Syncing to cloud…" : "✓ Workout updated & saved to history";
+      }
+    } else if(phase === "history"){
+      renderHistory();
+    }
+
+    if(currentUser && fbDb){
+      pushSingleWorkout(target).then(function(ok){
+        var hint2 = $("doneSavedHint");
+        if(ok && isFromDone && hint2) hint2.textContent = "✓ Workout updated & synced to cloud";
+      });
+    }
+    return true;
+  }
+
   function toFirestoreData(rec){
     return {
       id: rec.id,
@@ -1215,8 +1308,13 @@
               byId[data.id] = data;
             } else {
               if(!byId[data.id].workoutType) byId[data.id].workoutType = data.workoutType;
-              if(data.notes && !byId[data.id].notes) byId[data.id].notes = data.notes;
-              else if(typeof data.notes === "string" && (!byId[data.id].updatedAt || (data.updatedAt && data.updatedAt >= byId[data.id].updatedAt))){
+              if(!byId[data.id].updatedAt || (data.updatedAt && data.updatedAt >= byId[data.id].updatedAt)){
+                if(typeof data.repsCompleted === "number") byId[data.id].repsCompleted = data.repsCompleted;
+                if(typeof data.elapsedSeconds === "number") byId[data.id].elapsedSeconds = data.elapsedSeconds;
+                if(typeof data.completed === "boolean") byId[data.id].completed = data.completed;
+                if(typeof data.notes === "string") byId[data.id].notes = data.notes;
+                if(data.updatedAt) byId[data.id].updatedAt = data.updatedAt;
+              } else if(data.notes && !byId[data.id].notes){
                 byId[data.id].notes = data.notes;
               }
               byId[data.id].synced = true;
@@ -1471,6 +1569,9 @@
       html += '    <div class="hist-date">' + syncIcon + ' <span>' + formatDateTime(w.timestamp) + '</span></div>';
       html += '    <div class="hist-actions">';
       html += '      <span class="badge-pill ' + badgeCls + '">' + badgeTxt + '</span>';
+      html += '      <button class="edit-btn" data-edit="' + w.id + '" title="Edit reps &amp; duration" aria-label="Edit reps and duration">';
+      html += '        <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>';
+      html += '      </button>';
       html += '      <button class="del-btn" data-del="' + w.id + '" title="Delete workout" aria-label="Delete workout">';
       html += '        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>';
       html += '      </button>';
@@ -1514,9 +1615,12 @@
       html += '        <button class="btn-sm" data-save-note="' + w.id + '" style="color:var(--idle);border-color:rgba(232,163,61,0.35);">Save Note</button>';
       html += '      </div>';
       html += '    </div>';
-      html += '    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">';
+      html += '    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;gap:8px;flex-wrap:wrap;">';
       html += '      <span style="font-size:11.5px;color:var(--muted);">Status: ' + syncText + '</span>';
-      html += '      <button class="btn-sm" data-load="' + w.id + '" style="color:var(--go);border-color:rgba(59,209,122,0.35);">Load Settings</button>';
+      html += '      <div style="display:flex;gap:6px;">';
+      html += '        <button class="btn-sm" data-edit="' + w.id + '" style="color:var(--idle);border-color:rgba(232,163,61,0.35);">Edit Reps / Time</button>';
+      html += '        <button class="btn-sm" data-load="' + w.id + '" style="color:var(--go);border-color:rgba(59,209,122,0.35);">Load Settings</button>';
+      html += '      </div>';
       html += '    </div>';
       html += '  </div>';
       html += '</div>';
@@ -1524,10 +1628,11 @@
 
     container.innerHTML = html;
 
-    // Bind card expansion, delete buttons, note saving, and load settings buttons
+    // Bind card expansion, edit buttons, delete buttons, note saving, and load settings buttons
     container.querySelectorAll(".hist-card").forEach(function(card){
       card.addEventListener("click", function(e){
         if(
+          e.target.closest("[data-edit]") ||
           e.target.closest("[data-del]") ||
           e.target.closest("[data-load]") ||
           e.target.closest("[data-note-input]") ||
@@ -1563,6 +1668,14 @@
       });
     });
 
+    container.querySelectorAll("[data-edit]").forEach(function(btn){
+      btn.addEventListener("click", function(e){
+        e.stopPropagation();
+        var id = btn.getAttribute("data-edit");
+        openEditModal(id);
+      });
+    });
+
     container.querySelectorAll("[data-del]").forEach(function(btn){
       btn.addEventListener("click", function(e){
         e.stopPropagation();
@@ -1591,6 +1704,55 @@
         }
       });
     });
+  }
+
+  var pendingEditId = null;
+  var editModalReps = 130;
+  var editModalSec = 1200;
+
+  function parseDurationInput(raw, fallbackSec){
+    var str = String(raw || "").trim();
+    if(!str) return fallbackSec;
+    if(str.indexOf(":") !== -1){
+      var parts = str.split(":");
+      if(parts.length === 2){
+        var m = parseInt(parts[0].replace(/\D/g, ""), 10) || 0;
+        var s = parseInt(parts[1].replace(/\D/g, ""), 10) || 0;
+        return clamp(m * 60 + s, 1, 36000);
+      }
+      if(parts.length >= 3){
+        var h = parseInt(parts[0].replace(/\D/g, ""), 10) || 0;
+        var m2 = parseInt(parts[1].replace(/\D/g, ""), 10) || 0;
+        var s2 = parseInt(parts[2].replace(/\D/g, ""), 10) || 0;
+        return clamp(h * 3600 + m2 * 60 + s2, 1, 36000);
+      }
+    }
+    var num = parseFloat(str.replace(/[^0-9.]/g, ""));
+    if(!isNaN(num) && num > 0){
+      return clamp(Math.round(num * 60), 1, 36000);
+    }
+    return fallbackSec;
+  }
+
+  function openEditModal(id){
+    if(!id) return;
+    var w = getWorkouts().find(function(item){ return item.id === id; });
+    if(!w) return;
+    pendingEditId = id;
+    editModalReps = clamp(Math.round(w.repsCompleted || 0), 0, 9999);
+    editModalSec = clamp(Math.round(w.elapsedSeconds || 60), 1, 36000);
+
+    var typeLbl = (w.workoutType === "sixCount") ? "Six Count" : "Navy Seal";
+    $("editModalSubtitle").textContent = typeLbl + " \u00b7 " + formatDateTime(w.timestamp);
+    $("editRepsLabel").textContent = "Actual Reps (Target: " + (w.repsTarget || 0) + ")";
+    $("editRepsInput").value = String(editModalReps);
+    $("editTimeInput").value = fmt(editModalSec);
+    $("editModal").classList.remove("hidden");
+  }
+
+  function closeEditModal(){
+    pendingEditId = null;
+    $("editModal").classList.add("hidden");
   }
 
   function openDeleteModal(id){
@@ -1913,6 +2075,69 @@
   });
 
   $("doneNotesInput").addEventListener("blur", saveDoneNotes);
+
+  function openDoneWorkoutEdit(){
+    if(lastSavedWorkoutId) openEditModal(lastSavedWorkoutId);
+  }
+  $("doneEditBtn").addEventListener("click", openDoneWorkoutEdit);
+  $("doneNum").addEventListener("click", openDoneWorkoutEdit);
+  $("doneTimeStat").addEventListener("click", openDoneWorkoutEdit);
+
+  document.querySelectorAll("[data-edit-step]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var dir = parseInt(btn.getAttribute("data-dir"), 10) || 0;
+      var kind = btn.getAttribute("data-edit-step");
+      if(kind === "reps"){
+        var curR = parseInt(String($("editRepsInput").value).replace(/\D/g, ""), 10);
+        if(!isNaN(curR)) editModalReps = curR;
+        editModalReps = clamp(editModalReps + dir, 0, 9999);
+        $("editRepsInput").value = String(editModalReps);
+      } else if(kind === "time"){
+        editModalSec = parseDurationInput($("editTimeInput").value, editModalSec);
+        editModalSec = clamp(editModalSec + dir * 60, 1, 36000);
+        $("editTimeInput").value = fmt(editModalSec);
+      }
+    });
+  });
+
+  $("editRepsInput").addEventListener("input", function(e){
+    var raw = String(e.target.value).replace(/\D/g, "");
+    if(raw !== ""){
+      editModalReps = clamp(parseInt(raw, 10), 0, 9999);
+    }
+  });
+  $("editRepsInput").addEventListener("blur", function(){
+    var raw = String($("editRepsInput").value).replace(/\D/g, "");
+    if(raw !== "") editModalReps = clamp(parseInt(raw, 10), 0, 9999);
+    $("editRepsInput").value = String(editModalReps);
+  });
+
+  $("editTimeInput").addEventListener("blur", function(){
+    editModalSec = parseDurationInput($("editTimeInput").value, editModalSec);
+    $("editTimeInput").value = fmt(editModalSec);
+  });
+
+  function commitEditModal(){
+    if(!pendingEditId) return;
+    var rawR = String($("editRepsInput").value).replace(/\D/g, "");
+    if(rawR !== "") editModalReps = clamp(parseInt(rawR, 10), 0, 9999);
+    editModalSec = parseDurationInput($("editTimeInput").value, editModalSec);
+    var id = pendingEditId;
+    closeEditModal();
+    updateWorkoutStats(id, editModalReps, editModalSec);
+  }
+
+  $("cancelEditBtn").addEventListener("click", closeEditModal);
+  $("saveEditBtn").addEventListener("click", commitEditModal);
+  $("editModal").addEventListener("click", function(e){
+    if(e.target === $("editModal")) closeEditModal();
+  });
+  $("editRepsInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){ e.preventDefault(); commitEditModal(); }
+  });
+  $("editTimeInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){ e.preventDefault(); commitEditModal(); }
+  });
   
   $("startBtn").addEventListener("click", start);
   $("stopBtn").addEventListener("click", stopEarly);

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'burpee-pacer-v5';
+const CACHE_NAME = 'burpee-pacer-v6';
 const ASSETS = [
   './',
   './index.html',
